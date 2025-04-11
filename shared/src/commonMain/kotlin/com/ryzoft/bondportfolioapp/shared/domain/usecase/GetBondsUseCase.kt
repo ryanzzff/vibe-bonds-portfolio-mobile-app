@@ -1,4 +1,4 @@
-package com.ryzoft.bondportfolioapp.shared.domain.use_case
+package com.ryzoft.bondportfolioapp.shared.domain.usecase
 
 import com.ryzoft.bondportfolioapp.shared.domain.model.Bond
 import com.ryzoft.bondportfolioapp.shared.domain.repository.BondRepository

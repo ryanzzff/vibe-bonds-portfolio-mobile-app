@@ -6,8 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
+import com.ryzoft.bondportfolioapp.android.navigation.AppNavHost
 import com.ryzoft.bondportfolioapp.shared.data.local.DatabaseDriverFactory
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +24,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Text("Hello World")
+                    val navController = rememberNavController()
+                    AppNavHost(navController = navController)
                 }
             }
         }

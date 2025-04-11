@@ -39,7 +39,7 @@ This list outlines the steps to build the Bond Portfolio Tracker app using Kotli
 
 ## Phase 2: Android UI - Bond Management (androidApp Module)
 
-*   [ ] 1. **Navigation:** Set up basic Jetpack Compose Navigation Host with initial screens (PortfolioList, AddBond, BondDetails).
+*   [x] 1. **Navigation:** Set up basic Jetpack Compose Navigation Host with initial screens (PortfolioList, AddBond, BondDetails).
 *   [ ] 2. **Portfolio List Screen:**
     *   [ ] Create `PortfolioListViewModel` (Android ViewModel). Inject `GetBondsUseCase`.
     *   [ ] Expose bond list state (e.g., using `StateFlow<List<Bond>>`).
