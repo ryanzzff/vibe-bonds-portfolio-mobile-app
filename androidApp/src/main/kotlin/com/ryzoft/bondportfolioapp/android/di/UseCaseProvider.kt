@@ -11,6 +11,7 @@ import com.ryzoft.bondportfolioapp.shared.data.repository.BondRepositoryImpl
 import com.ryzoft.bondportfolioapp.shared.domain.repository.BondRepository
 import com.ryzoft.bondportfolioapp.shared.domain.usecase.AddBondUseCase
 import com.ryzoft.bondportfolioapp.shared.domain.usecase.DeleteBondUseCase
+import com.ryzoft.bondportfolioapp.shared.domain.usecase.GetAllFutureInterestPaymentsUseCase
 import com.ryzoft.bondportfolioapp.shared.domain.usecase.GetBondDetailsUseCase
 import com.ryzoft.bondportfolioapp.shared.domain.usecase.GetBondsUseCase
 import com.ryzoft.bondportfolioapp.shared.domain.usecase.UpdateBondUseCase
@@ -81,5 +82,12 @@ object UseCaseProvider {
      */
     fun provideDeleteBondUseCase(context: Context): DeleteBondUseCase {
         return DeleteBondUseCase(provideBondRepository(context))
+    }
+    
+    /**
+     * Get an instance of GetAllFutureInterestPaymentsUseCase
+     */
+    fun provideGetAllFutureInterestPaymentsUseCase(): GetAllFutureInterestPaymentsUseCase {
+        return GetAllFutureInterestPaymentsUseCase()
     }
 }

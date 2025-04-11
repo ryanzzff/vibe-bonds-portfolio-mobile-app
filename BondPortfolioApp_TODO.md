@@ -70,15 +70,15 @@ This list outlines the steps to build the Bond Portfolio Tracker app using Kotli
 
 ## Phase 3: Core Logic - Interest & Yield Calculations (Shared Module)
 
-*   [ ] 1. **Interest Calculation Logic:**
-    *   [ ] Create `InterestCalculator` utility class or functions in `shared/commonMain`.
-    *   [ ] Implement logic to calculate payment dates based on `maturity_date`, `payment_frequency`, and `purchase_date` (or first payment date if known).
-    *   [ ] Implement logic to calculate payment amount (`face_value_per_bond * quantity_purchased * coupon_rate / payments_per_year`).
-    *   [ ] Handle different frequencies (Semi-Annual, Annual, Quarterly, Monthly).
-    *   [ ] Handle ZeroCoupon bonds (no payments).
+*   [x] 1. **Interest Calculation Logic:**
+    *   [x] Create `InterestCalculator` utility class or functions in `shared/commonMain`.
+    *   [x] Implement logic to calculate payment dates based on `maturity_date`, `payment_frequency`, and `purchase_date` (or first payment date if known).
+    *   [x] Implement logic to calculate payment amount (`face_value_per_bond * quantity_purchased * coupon_rate / payments_per_year`).
+    *   [x] Handle different frequencies (Semi-Annual, Annual, Quarterly, Monthly).
+    *   [x] Handle ZeroCoupon bonds (no payments).
 *   [ ] 2. **Domain Layer:** Create Use Cases:
     *   [ ] `GetNextInterestPaymentUseCase(bond: Bond)` -> `InterestPayment?`
-    *   [ ] `GetAllFutureInterestPaymentsUseCase(bond: Bond)` -> `List<InterestPayment>`
+    *   [x] `GetAllFutureInterestPaymentsUseCase(bond: Bond)` -> `List<InterestPayment>`
     *   [ ] `GetPortfolioInterestScheduleUseCase(repository: BondRepository)` -> `List<InterestPayment>` (combines payments from all bonds, sorted)
     *   [ ] `GetMonthlyInterestSummaryUseCase(...)` -> `Map<YearMonth, Double>`
     *   [ ] `GetYearlyInterestSummaryUseCase(...)` -> `Map<Int, Double>`
