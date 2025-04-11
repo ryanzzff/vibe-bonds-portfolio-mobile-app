@@ -8,7 +8,8 @@ import kotlinx.datetime.LocalDate;
 CREATE TABLE Bonds (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     name TEXT,
-    isinCusip TEXT,
+    isin TEXT,
+    cusip TEXT,
     issuerName TEXT NOT NULL,
     bondType TEXT AS BondType NOT NULL, -- Mapped to BondType enum
     purchaseDate TEXT AS LocalDate NOT NULL, -- Mapped to kotlinx.datetime.LocalDate
@@ -38,7 +39,8 @@ WHERE id = ?;
 insertBond:
 INSERT OR REPLACE INTO Bonds (
     name,
-    isinCusip,
+    isin,
+    cusip,
     issuerName,
     bondType,
     purchaseDate,
@@ -50,14 +52,15 @@ INSERT OR REPLACE INTO Bonds (
     paymentFrequency,
     currency,
     notes
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 -- Update an existing bond
 updateBond:
 UPDATE Bonds
 SET
     name = ?,
-    isinCusip = ?,
+    isin = ?,
+    cusip = ?,
     issuerName = ?,
     bondType = ?,
     purchaseDate = ?,

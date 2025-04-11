@@ -36,7 +36,8 @@ class BondRepositoryImpl(
         withContext(Dispatchers.Default) {
             queries.insertBond(
                 name = bond.name,
-                isinCusip = bond.isinCusip,
+                isin = bond.isin,
+                cusip = bond.cusip,
                 issuerName = bond.issuerName,
                 bondType = bond.bondType,
                 purchaseDate = bond.purchaseDate,
@@ -57,7 +58,8 @@ class BondRepositoryImpl(
             queries.updateBond(
                 id = bond.id,
                 name = bond.name,
-                isinCusip = bond.isinCusip,
+                isin = bond.isin,
+                cusip = bond.cusip,
                 issuerName = bond.issuerName,
                 bondType = bond.bondType,
                 purchaseDate = bond.purchaseDate,
@@ -85,7 +87,8 @@ class BondRepositoryImpl(
         return Bond(
             id = this.id,
             name = this.name,
-            isinCusip = this.isinCusip,
+            isin = this.isin,
+            cusip = this.cusip,
             issuerName = this.issuerName,
             bondType = this.bondType, // Adapters handle the conversion
             purchaseDate = this.purchaseDate,

@@ -15,7 +15,7 @@ object BondTypeAdapter : ColumnAdapter<BondType, String> {
         } catch (e: IllegalArgumentException) {
             // Log this error in a real app
             println("Warning: Unrecognized BondType '$databaseValue' found in database.")
-            BondType.COMPANY // Or handle appropriately
+            BondType.CORPORATE // Or handle appropriately
         }
     }
 

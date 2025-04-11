@@ -20,6 +20,7 @@ data class Bond(
 
     // Optional fields
     val name: String? = null, // User-defined nickname
-    val isinCusip: String? = null, // ISIN or CUSIP identifier
+    val isin: String? = null, // International Securities Identification Number
+    val cusip: String? = null, // CUSIP identifier
     val notes: String? = null
 )

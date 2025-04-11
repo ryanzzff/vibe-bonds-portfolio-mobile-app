@@ -4,38 +4,38 @@ This list outlines the steps to build the Bond Portfolio Tracker app using Kotli
 
 ## Phase 0: Project Setup & Configuration
 
-*   [ ] 1. Set up a new Kotlin Multiplatform Mobile project (e.g., using IntelliJ IDEA wizard or KMP template).
-*   [ ] 2. Configure `build.gradle.kts` files (root, shared, androidApp).
-*   [ ] 3. Add KMP dependencies to `shared` module:
-    *   [ ] SQLDelight (runtime, drivers - native, android)
-    *   [ ] Kotlinx Coroutines
-    *   [ ] Kotlinx Datetime
+*   [x] 1. Set up a new Kotlin Multiplatform Mobile project (e.g., using IntelliJ IDEA wizard or KMP template).
+*   [x] 2. Configure `build.gradle.kts` files (root, shared, androidApp).
+*   [x] 3. Add KMP dependencies to `shared` module:
+    *   [x] SQLDelight (runtime, drivers - native, android)
+    *   [x] Kotlinx Coroutines
+    *   [x] Kotlinx Datetime
     *   [ ] Potentially Ktor client & serialization (for future API)
     *   [ ] Potentially KMP ViewModel library (e.g., Moko MVVM, KMM-ViewModel)
-*   [ ] 4. Configure SQLDelight Gradle plugin: Define package name, database name (`BondPortfolio.db`).
-*   [ ] 5. Add Android dependencies to `androidApp` module:
-    *   [ ] Jetpack Compose (UI, Navigation, ViewModel)
-    *   [ ] Material Design 3 Components
-    *   [ ] AndroidX Lifecycle/ViewModel KTX
+*   [x] 4. Configure SQLDelight Gradle plugin: Define package name, database name (`BondPortfolio.db`).
+*   [x] 5. Add Android dependencies to `androidApp` module:
+    *   [x] Jetpack Compose (UI, Navigation, ViewModel)
+    *   [x] Material Design 3 Components
+    *   [x] AndroidX Lifecycle/ViewModel KTX
     *   [ ] Coil (for potential future image loading, optional now)
-*   [ ] 6. Set up basic project structure (folders for `domain`, `data`, `presentation` within `shared` and `androidApp`).
+*   [x] 6. Set up basic project structure (folders for `domain`, `data`, `presentation` within `shared` and `androidApp`).
 
 ## Phase 1: Core Data & Persistence (Shared Module)
 
-*   [ ] 1. **Domain Layer:** Define core data classes (`Bond`, `InterestPayment`, `BondType` enum, `PaymentFrequency` enum) in `shared/src/commonMain/kotlin/.../domain/model`.
-*   [ ] 2. **Domain Layer:** Define `BondRepository` interface in `shared/src/commonMain/kotlin/.../domain/repository`. Include methods like `addBond`, `getBondById`, `getAllBonds`, `updateBond`, `deleteBond`.
-*   [ ] 3. **Data Layer:** Define SQLDelight schema (`.sq` files) in `shared/src/commonMain/sqldelight/.../Bond.sq`.
-    *   [ ] Create `Bonds` table schema matching `Bond` data class fields (FR1.2, FR1.3). Handle date storage (ISO String or Timestamp). Handle enums (store as Text).
-*   [ ] 4. **Data Layer:** Implement `BondRepository` in `shared/src/commonMain/kotlin/.../data/repository`.
-    *   [ ] Inject SQLDelight database instance (platform-specific drivers needed).
-    *   [ ] Write repository implementation using generated SQLDelight queries.
-*   [ ] 5. **Data Layer:** Set up platform-specific SQLDelight driver creation (e.g., in `androidMain` and `iosMain` - *defer iOS driver setup if not building immediately*).
-*   [ ] 6. **Domain Layer:** Create initial Use Cases:
-    *   [ ] `AddBondUseCase(repository: BondRepository)`
-    *   [ ] `GetBondsUseCase(repository: BondRepository)`
-    *   [ ] `GetBondDetailsUseCase(repository: BondRepository)`
-    *   [ ] `UpdateBondUseCase(repository: BondRepository)`
-    *   [ ] `DeleteBondUseCase(repository: BondRepository)`
+*   [x] 1. **Domain Layer:** Define core data classes (`Bond`, `InterestPayment`, `BondType` enum, `PaymentFrequency` enum) in `shared/src/commonMain/kotlin/.../domain/model`.
+*   [x] 2. **Domain Layer:** Define `BondRepository` interface in `shared/src/commonMain/kotlin/.../domain/repository`. Include methods like `addBond`, `getBondById`, `getAllBonds`, `updateBond`, `deleteBond`.
+*   [x] 3. **Data Layer:** Define SQLDelight schema (`.sq` files) in `shared/src/commonMain/sqldelight/.../Bond.sq`.
+    *   [x] Create `Bonds` table schema matching `Bond` data class fields (FR1.2, FR1.3). Handle date storage (ISO String or Timestamp). Handle enums (store as Text).
+*   [x] 4. **Data Layer:** Implement `BondRepository` in `shared/src/commonMain/kotlin/.../data/repository`.
+    *   [x] Inject SQLDelight database instance (platform-specific drivers needed).
+    *   [x] Write repository implementation using generated SQLDelight queries.
+*   [x] 5. **Data Layer:** Set up platform-specific SQLDelight driver creation (e.g., in `androidMain` and `iosMain` - *defer iOS driver setup if not building immediately*).
+*   [x] 6. **Domain Layer:** Create initial Use Cases:
+    *   [x] `AddBondUseCase(repository: BondRepository)`
+    *   [x] `GetBondsUseCase(repository: BondRepository)`
+    *   [x] `GetBondDetailsUseCase(repository: BondRepository)`
+    *   [x] `UpdateBondUseCase(repository: BondRepository)`
+    *   [x] `DeleteBondUseCase(repository: BondRepository)`
 
 ## Phase 2: Android UI - Bond Management (androidApp Module)
 

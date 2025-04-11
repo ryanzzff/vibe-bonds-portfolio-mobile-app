@@ -5,7 +5,7 @@ package com.ryzoft.bondportfolioapp.shared.domain.model
  */
 enum class BondType {
     TREASURY,
-    COMPANY,
+    CORPORATE,
     MUNICIPAL, // Added for potential future use
     AGENCY     // Added for potential future use
 }
