@@ -1,0 +1,41 @@
+# Gradle
+.gradle
+build/
+
+# Kotlin
+*.iml
+.idea/
+*.kdoc
+
+# Android
+*.apk
+*.aab
+*.ap_
+*.a_
+*.dex
+*.class
+*.lock
+*.log
+*.hprof
+
+# Local properties
+local.properties
+
+# Keystore files
+*.jks
+*.keystore
+
+# Captures
+*.capture
+
+# SQLDelight
+.sqlite
+.sqlite-journal
+
+# Generated
+/shared/build
+/androidApp/build
+/iosApp/build
+
+# Other
+.DS_Store
