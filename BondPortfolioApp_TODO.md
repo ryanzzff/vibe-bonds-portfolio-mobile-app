@@ -76,12 +76,12 @@ This list outlines the steps to build the Bond Portfolio Tracker app using Kotli
     *   [x] Implement logic to calculate payment amount (`face_value_per_bond * quantity_purchased * coupon_rate / payments_per_year`).
     *   [x] Handle different frequencies (Semi-Annual, Annual, Quarterly, Monthly).
     *   [x] Handle ZeroCoupon bonds (no payments).
-*   [ ] 2. **Domain Layer:** Create Use Cases:
-    *   [ ] `GetNextInterestPaymentUseCase(bond: Bond)` -> `InterestPayment?`
+*   [x] 2. **Domain Layer:** Create Use Cases:
+    *   [x] `GetNextInterestPaymentUseCase(bond: Bond)` -> `InterestPayment?`
     *   [x] `GetAllFutureInterestPaymentsUseCase(bond: Bond)` -> `List<InterestPayment>`
-    *   [ ] `GetPortfolioInterestScheduleUseCase(repository: BondRepository)` -> `List<InterestPayment>` (combines payments from all bonds, sorted)
-    *   [ ] `GetMonthlyInterestSummaryUseCase(...)` -> `Map<YearMonth, Double>`
-    *   [ ] `GetYearlyInterestSummaryUseCase(...)` -> `Map<Int, Double>`
+    *   [x] `GetPortfolioInterestScheduleUseCase(repository: BondRepository)` -> `List<InterestPayment>` (combines payments from all bonds, sorted)
+    *   [x] `GetMonthlyInterestSummaryUseCase(...)` -> `Map<YearMonth, Double>`
+    *   [x] `GetYearlyInterestSummaryUseCase(...)` -> `Map<Int, Double>`
 *   [ ] 3. **Yield Calculation Logic:**
     *   [ ] Create `YieldCalculator` utility class/functions in `shared/commonMain`.
     *   [ ] Implement Average Coupon Rate calculation (weighted).

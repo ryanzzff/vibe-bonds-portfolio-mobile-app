@@ -14,6 +14,10 @@ import com.ryzoft.bondportfolioapp.shared.domain.usecase.DeleteBondUseCase
 import com.ryzoft.bondportfolioapp.shared.domain.usecase.GetAllFutureInterestPaymentsUseCase
 import com.ryzoft.bondportfolioapp.shared.domain.usecase.GetBondDetailsUseCase
 import com.ryzoft.bondportfolioapp.shared.domain.usecase.GetBondsUseCase
+import com.ryzoft.bondportfolioapp.shared.domain.usecase.GetMonthlyInterestSummaryUseCase
+import com.ryzoft.bondportfolioapp.shared.domain.usecase.GetNextInterestPaymentUseCase
+import com.ryzoft.bondportfolioapp.shared.domain.usecase.GetPortfolioInterestScheduleUseCase
+import com.ryzoft.bondportfolioapp.shared.domain.usecase.GetYearlyInterestSummaryUseCase
 import com.ryzoft.bondportfolioapp.shared.domain.usecase.UpdateBondUseCase
 
 /**
@@ -22,6 +26,7 @@ import com.ryzoft.bondportfolioapp.shared.domain.usecase.UpdateBondUseCase
 object UseCaseProvider {
 
     private var bondRepository: BondRepository? = null
+    private var getPortfolioInterestScheduleUseCase: GetPortfolioInterestScheduleUseCase? = null
     
     /**
      * Get or create the BondRepository instance
@@ -89,5 +94,36 @@ object UseCaseProvider {
      */
     fun provideGetAllFutureInterestPaymentsUseCase(): GetAllFutureInterestPaymentsUseCase {
         return GetAllFutureInterestPaymentsUseCase()
+    }
+
+    /**
+     * Get an instance of GetNextInterestPaymentUseCase
+     */
+    fun provideGetNextInterestPaymentUseCase(): GetNextInterestPaymentUseCase {
+        return GetNextInterestPaymentUseCase()
+    }
+
+    /**
+     * Get or create the GetPortfolioInterestScheduleUseCase instance
+     */
+    private fun provideGetPortfolioInterestScheduleUseCase(context: Context): GetPortfolioInterestScheduleUseCase {
+        return getPortfolioInterestScheduleUseCase ?: synchronized(this) {
+            getPortfolioInterestScheduleUseCase ?: GetPortfolioInterestScheduleUseCase(provideBondRepository(context))
+                .also { getPortfolioInterestScheduleUseCase = it }
+        }
+    }
+
+    /**
+     * Get an instance of GetMonthlyInterestSummaryUseCase
+     */
+    fun provideGetMonthlyInterestSummaryUseCase(context: Context): GetMonthlyInterestSummaryUseCase {
+        return GetMonthlyInterestSummaryUseCase(provideGetPortfolioInterestScheduleUseCase(context))
+    }
+
+    /**
+     * Get an instance of GetYearlyInterestSummaryUseCase
+     */
+    fun provideGetYearlyInterestSummaryUseCase(context: Context): GetYearlyInterestSummaryUseCase {
+        return GetYearlyInterestSummaryUseCase(provideGetPortfolioInterestScheduleUseCase(context))
     }
 }
