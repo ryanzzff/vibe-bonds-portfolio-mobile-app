@@ -64,22 +64,25 @@ kotlin {
             }
         }
         val androidMain by getting {
-             dependsOn(commonMain)
-             dependencies {
-                 // SQLDelight Android Driver
-                 implementation("app.cash.sqldelight:android-driver:2.0.1")
-                 // Ktor Android client (optional)
-                 // api("io.ktor:ktor-client-android:2.3.8")
-             }
+            dependencies {
+                // SQLDelight Android Driver
+                implementation("app.cash.sqldelight:android-driver:2.0.1")
+                // Ktor Android client (optional)
+                // api("io.ktor:ktor-client-android:2.3.8")
+            }
         }
-        val androidUnitTest by getting
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(kotlin("test-junit"))
+                implementation("junit:junit:4.13.2")
+            }
+        }
 
         // Uncomment for iOS
         /*
         val iosMain by getting {
-            dependsOn(commonMain)
             dependencies {
-                 // SQLDelight Native Driver
+                // SQLDelight Native Driver
                 implementation("app.cash.sqldelight:native-driver:2.0.1")
                 // Ktor Darwin client (optional)
                 // api("io.ktor:ktor-client-darwin:2.3.8")
@@ -117,7 +120,6 @@ android {
     }
     // Needed for SQLDelight
     sourceSets["main"].java.srcDirs("src/androidMain/kotlin", "build/generated/sqldelight/code/BondPortfolioDB/androidMain")
-
 }
 
 sqldelight {
