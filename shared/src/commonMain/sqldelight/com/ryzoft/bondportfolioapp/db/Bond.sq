@@ -1,0 +1,81 @@
+import com.ryzoft.bondportfolioapp.shared.domain.model.BondType;
+import com.ryzoft.bondportfolioapp.shared.domain.model.PaymentFrequency;
+import kotlinx.datetime.LocalDate;
+
+-- Define adapters for custom column types
+-- We will implement these in Kotlin later
+-- Ensures SQLDelight generates code expecting these types
+CREATE TABLE Bonds (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    isinCusip TEXT,
+    issuerName TEXT NOT NULL,
+    bondType TEXT AS BondType NOT NULL, -- Mapped to BondType enum
+    purchaseDate TEXT AS LocalDate NOT NULL, -- Mapped to kotlinx.datetime.LocalDate
+    maturityDate TEXT AS LocalDate NOT NULL, -- Mapped to kotlinx.datetime.LocalDate
+    faceValuePerBond REAL NOT NULL,
+    purchasePrice REAL NOT NULL,
+    quantityPurchased INTEGER NOT NULL,
+    couponRate REAL NOT NULL,
+    paymentFrequency TEXT AS PaymentFrequency NOT NULL, -- Mapped to PaymentFrequency enum
+    currency TEXT NOT NULL DEFAULT 'USD',
+    notes TEXT
+);
+
+-- Select all bonds
+selectAll:
+SELECT *
+FROM Bonds
+ORDER BY purchaseDate DESC;
+
+-- Select a specific bond by ID
+selectById:
+SELECT *
+FROM Bonds
+WHERE id = ?;
+
+-- Insert a new bond
+insertBond:
+INSERT OR REPLACE INTO Bonds (
+    name,
+    isinCusip,
+    issuerName,
+    bondType,
+    purchaseDate,
+    maturityDate,
+    faceValuePerBond,
+    purchasePrice,
+    quantityPurchased,
+    couponRate,
+    paymentFrequency,
+    currency,
+    notes
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+-- Update an existing bond
+updateBond:
+UPDATE Bonds
+SET
+    name = ?,
+    isinCusip = ?,
+    issuerName = ?,
+    bondType = ?,
+    purchaseDate = ?,
+    maturityDate = ?,
+    faceValuePerBond = ?,
+    purchasePrice = ?,
+    quantityPurchased = ?,
+    couponRate = ?,
+    paymentFrequency = ?,
+    currency = ?,
+    notes = ?
+WHERE id = ?;
+
+-- Delete a bond by ID
+deleteBond:
+DELETE FROM Bonds
+WHERE id = ?;
+
+-- Get the last inserted row ID
+lastInsertRowId:
+SELECT last_insert_rowid();
