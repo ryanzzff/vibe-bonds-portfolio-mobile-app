@@ -9,7 +9,6 @@ The Vibe Bonds Portfolio App is a mobile application designed to help users mana
 ## Getting Started
 ### Prerequisites
 - Android 5.0 or higher
-- Internet connection for real-time data updates
 
 ### Installation
 1. Clone this repository to your local machine.
