@@ -51,15 +51,15 @@ This list outlines the steps to build the Bond Portfolio Tracker app using Kotli
     *   [x] Add portfolio summary section with total investment, face value, and average coupon rate.
     *   [x] Add bond type filtering functionality.
     *   [x] Create comprehensive unit and UI tests.
-*   [ ] 3. **Add/Edit Bond Screen:**
-    *   [ ] Create `AddEditBondViewModel`. Inject `AddBondUseCase`, `UpdateBondUseCase`, `GetBondDetailsUseCase` (for editing).
-    *   [ ] Manage form input state (consider a `BondDraft` state class).
-    *   [ ] Create `AddEditBondScreen` Composable.
-    *   [ ] Implement form fields for all mandatory/optional bond details (FR1.2, FR1.3). Use `TextField`, `DatePickerDialog`, `DropdownMenu`, etc.
-    *   [ ] Implement input validation.
-    *   [ ] Implement Save button logic calling the appropriate UseCase.
-    *   [ ] Handle navigation back after save/cancel.
-    *   [ ] Adapt screen for both Add (new bond) and Edit (load existing bond) modes.
+*   [x] 3. **Add/Edit Bond Screen:**
+    *   [x] Create `AddEditBondViewModel`. Inject `AddBondUseCase`, `UpdateBondUseCase`, `GetBondDetailsUseCase` (for editing).
+    *   [x] Manage form input state (consider a `BondDraft` state class).
+    *   [x] Create `AddEditBondScreen` Composable.
+    *   [x] Implement form fields for all mandatory/optional bond details (FR1.2, FR1.3). Use `TextField`, `DatePickerDialog`, `DropdownMenu`, etc.
+    *   [x] Implement input validation.
+    *   [x] Implement Save button logic calling the appropriate UseCase.
+    *   [x] Handle navigation back after save/cancel.
+    *   [x] Adapt screen for both Add (new bond) and Edit (load existing bond) modes.
 *   [ ] 4. **Bond Details Screen:**
     *   [ ] Create `BondDetailsViewModel`. Inject `GetBondDetailsUseCase`, `DeleteBondUseCase`.
     *   [ ] Load bond details based on passed ID. Expose state.

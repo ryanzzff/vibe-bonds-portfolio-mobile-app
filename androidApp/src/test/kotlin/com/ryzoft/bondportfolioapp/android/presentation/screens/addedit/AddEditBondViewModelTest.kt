@@ -36,7 +36,7 @@ class AddEditBondViewModelTest {
     private lateinit var addBondUseCase: AddBondUseCase
     private lateinit var updateBondUseCase: UpdateBondUseCase
     private lateinit var getBondDetailsUseCase: GetBondDetailsUseCase
-    private lateinit var viewModel: AddEditBondViewModel
+    private lateinit var viewModel: AddEditBondViewModelImpl
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
@@ -55,7 +55,7 @@ class AddEditBondViewModelTest {
     @Test
     fun `init with null bondId should set up add mode`() = runTest {
         // When
-        viewModel = AddEditBondViewModel(addBondUseCase, updateBondUseCase, getBondDetailsUseCase)
+        viewModel = AddEditBondViewModelImpl(addBondUseCase, updateBondUseCase, getBondDetailsUseCase)
         viewModel.initialize(null)
 
         // Then
@@ -72,7 +72,7 @@ class AddEditBondViewModelTest {
         whenever(getBondDetailsUseCase(bondId)).thenReturn(testBond)
 
         // When
-        viewModel = AddEditBondViewModel(addBondUseCase, updateBondUseCase, getBondDetailsUseCase)
+        viewModel = AddEditBondViewModelImpl(addBondUseCase, updateBondUseCase, getBondDetailsUseCase)
         viewModel.initialize(bondId)
 
         // Then
@@ -93,7 +93,7 @@ class AddEditBondViewModelTest {
     @Test
     fun `validateForm should return false when required fields are empty`() = runTest {
         // Given
-        viewModel = AddEditBondViewModel(addBondUseCase, updateBondUseCase, getBondDetailsUseCase)
+        viewModel = AddEditBondViewModelImpl(addBondUseCase, updateBondUseCase, getBondDetailsUseCase)
         viewModel.initialize(null)
 
         // When - All fields empty
@@ -112,7 +112,7 @@ class AddEditBondViewModelTest {
     @Test
     fun `validateForm should return true when all required fields are valid`() = runTest {
         // Given
-        viewModel = AddEditBondViewModel(addBondUseCase, updateBondUseCase, getBondDetailsUseCase)
+        viewModel = AddEditBondViewModelImpl(addBondUseCase, updateBondUseCase, getBondDetailsUseCase)
         viewModel.initialize(null)
 
         // Fill in all required fields
@@ -143,7 +143,7 @@ class AddEditBondViewModelTest {
     @Test
     fun `saveBond in add mode should call addBondUseCase`() = runTest {
         // Given
-        viewModel = AddEditBondViewModel(addBondUseCase, updateBondUseCase, getBondDetailsUseCase)
+        viewModel = AddEditBondViewModelImpl(addBondUseCase, updateBondUseCase, getBondDetailsUseCase)
         viewModel.initialize(null)
 
         // Fill in required fields
@@ -173,7 +173,7 @@ class AddEditBondViewModelTest {
         val testBond = createTestBond(bondId)
         whenever(getBondDetailsUseCase(bondId)).thenReturn(testBond)
 
-        viewModel = AddEditBondViewModel(addBondUseCase, updateBondUseCase, getBondDetailsUseCase)
+        viewModel = AddEditBondViewModelImpl(addBondUseCase, updateBondUseCase, getBondDetailsUseCase)
         viewModel.initialize(bondId)
 
         // Update a field
@@ -199,12 +199,13 @@ class AddEditBondViewModelTest {
             faceValuePerBond = 1000.0,
             quantityPurchased = 5,
             purchasePrice = 950.0,
-            couponRate = 0.05,
+            couponRate = 0.05, // 5%
+            paymentFrequency = PaymentFrequency.SEMI_ANNUAL,
             purchaseDate = now,
             maturityDate = later,
-            paymentFrequency = PaymentFrequency.SEMI_ANNUAL,
-            notes = "Test notes",
-            isin = "US1234567890"
+            currency = "USD",
+            isin = "US123456AB12",
+            notes = "Test notes"
         )
     }
 }

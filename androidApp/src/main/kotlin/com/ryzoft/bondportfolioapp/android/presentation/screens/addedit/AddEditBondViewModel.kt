@@ -21,16 +21,39 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 
 /**
- * ViewModel for the Add/Edit Bond screen
+ * Interface for the Add/Edit Bond screen ViewModel
  */
-class AddEditBondViewModel(
+interface AddEditBondViewModel {
+    val uiState: StateFlow<AddEditBondUiState>
+    
+    fun initialize(bondId: Long?)
+    fun updateName(name: String)
+    fun updateIssuer(issuer: String)
+    fun updateIsin(isin: String)
+    fun updateBondType(bondType: BondType)
+    fun updateFaceValue(value: String)
+    fun updateQuantity(quantity: String)
+    fun updatePurchasePrice(price: String)
+    fun updateCouponRate(rate: String)
+    fun updatePaymentFrequency(frequency: PaymentFrequency)
+    fun updatePurchaseDate(date: LocalDate)
+    fun updateMaturityDate(date: LocalDate)
+    fun updateNotes(notes: String)
+    fun validateForm(): Boolean
+    fun saveBond(onComplete: () -> Unit)
+}
+
+/**
+ * Implementation of the Add/Edit Bond screen ViewModel
+ */
+class AddEditBondViewModelImpl(
     private val addBondUseCase: AddBondUseCase,
     private val updateBondUseCase: UpdateBondUseCase,
     private val getBondDetailsUseCase: GetBondDetailsUseCase
-) : ViewModel() {
+) : ViewModel(), AddEditBondViewModel {
 
     private val _uiState = MutableStateFlow(AddEditBondUiState())
-    val uiState: StateFlow<AddEditBondUiState> = _uiState.asStateFlow()
+    override val uiState: StateFlow<AddEditBondUiState> = _uiState.asStateFlow()
 
     private var currentBondId: Long? = null
 
@@ -38,7 +61,7 @@ class AddEditBondViewModel(
      * Initialize the ViewModel with an optional bond ID
      * @param bondId If not null, load the bond details for editing
      */
-    fun initialize(bondId: Long?) {
+    override fun initialize(bondId: Long?) {
         currentBondId = bondId
         if (bondId != null) {
             // Edit mode
@@ -86,51 +109,51 @@ class AddEditBondViewModel(
         }
     }
 
-    fun updateName(name: String) {
+    override fun updateName(name: String) {
         _uiState.update { it.copy(name = name, nameError = false) }
     }
 
-    fun updateIssuer(issuer: String) {
+    override fun updateIssuer(issuer: String) {
         _uiState.update { it.copy(issuer = issuer, issuerError = false) }
     }
 
-    fun updateIsin(isin: String) {
+    override fun updateIsin(isin: String) {
         _uiState.update { it.copy(isin = isin) }
     }
 
-    fun updateBondType(bondType: BondType) {
+    override fun updateBondType(bondType: BondType) {
         _uiState.update { it.copy(bondType = bondType) }
     }
 
-    fun updateFaceValue(value: String) {
+    override fun updateFaceValue(value: String) {
         _uiState.update { it.copy(faceValuePerBond = value, faceValueError = false) }
     }
 
-    fun updateQuantity(quantity: String) {
+    override fun updateQuantity(quantity: String) {
         _uiState.update { it.copy(quantityPurchased = quantity, quantityError = false) }
     }
 
-    fun updatePurchasePrice(price: String) {
+    override fun updatePurchasePrice(price: String) {
         _uiState.update { it.copy(purchasePrice = price, purchasePriceError = false) }
     }
 
-    fun updateCouponRate(rate: String) {
+    override fun updateCouponRate(rate: String) {
         _uiState.update { it.copy(couponRate = rate, couponRateError = false) }
     }
 
-    fun updatePaymentFrequency(frequency: PaymentFrequency) {
+    override fun updatePaymentFrequency(frequency: PaymentFrequency) {
         _uiState.update { it.copy(paymentFrequency = frequency) }
     }
 
-    fun updatePurchaseDate(date: LocalDate) {
+    override fun updatePurchaseDate(date: LocalDate) {
         _uiState.update { it.copy(purchaseDate = date) }
     }
 
-    fun updateMaturityDate(date: LocalDate) {
+    override fun updateMaturityDate(date: LocalDate) {
         _uiState.update { it.copy(maturityDate = date) }
     }
 
-    fun updateNotes(notes: String) {
+    override fun updateNotes(notes: String) {
         _uiState.update { it.copy(notes = notes) }
     }
 
@@ -138,7 +161,7 @@ class AddEditBondViewModel(
      * Validates the form inputs
      * @return True if all required fields are valid, false otherwise
      */
-    fun validateForm(): Boolean {
+    override fun validateForm(): Boolean {
         var isValid = true
         
         // Validate name
@@ -188,7 +211,7 @@ class AddEditBondViewModel(
      * Save the bond (either add new or update existing)
      * @param onComplete Callback to execute when saving is complete
      */
-    fun saveBond(onComplete: () -> Unit) {
+    override fun saveBond(onComplete: () -> Unit) {
         if (!validateForm()) {
             return
         }
