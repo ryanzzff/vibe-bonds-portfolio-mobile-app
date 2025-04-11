@@ -10,6 +10,7 @@ import com.ryzoft.bondportfolioapp.shared.data.local.adapters.PaymentFrequencyAd
 import com.ryzoft.bondportfolioapp.shared.data.repository.BondRepositoryImpl
 import com.ryzoft.bondportfolioapp.shared.domain.repository.BondRepository
 import com.ryzoft.bondportfolioapp.shared.domain.usecase.AddBondUseCase
+import com.ryzoft.bondportfolioapp.shared.domain.usecase.CalculateAverageYieldUseCase
 import com.ryzoft.bondportfolioapp.shared.domain.usecase.DeleteBondUseCase
 import com.ryzoft.bondportfolioapp.shared.domain.usecase.GetAllFutureInterestPaymentsUseCase
 import com.ryzoft.bondportfolioapp.shared.domain.usecase.GetBondDetailsUseCase
@@ -27,6 +28,7 @@ object UseCaseProvider {
 
     private var bondRepository: BondRepository? = null
     private var getPortfolioInterestScheduleUseCase: GetPortfolioInterestScheduleUseCase? = null
+    private var calculateAverageYieldUseCase: CalculateAverageYieldUseCase? = null
     
     /**
      * Get or create the BondRepository instance
@@ -125,5 +127,15 @@ object UseCaseProvider {
      */
     fun provideGetYearlyInterestSummaryUseCase(context: Context): GetYearlyInterestSummaryUseCase {
         return GetYearlyInterestSummaryUseCase(provideGetPortfolioInterestScheduleUseCase(context))
+    }
+    
+    /**
+     * Get or create the CalculateAverageYieldUseCase instance
+     */
+    fun provideCalculateAverageYieldUseCase(context: Context): CalculateAverageYieldUseCase {
+        return calculateAverageYieldUseCase ?: synchronized(this) {
+            calculateAverageYieldUseCase ?: CalculateAverageYieldUseCase(provideBondRepository(context))
+                .also { calculateAverageYieldUseCase = it }
+        }
     }
 }

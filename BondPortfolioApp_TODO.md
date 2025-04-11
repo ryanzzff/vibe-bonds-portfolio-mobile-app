@@ -82,13 +82,13 @@ This list outlines the steps to build the Bond Portfolio Tracker app using Kotli
     *   [x] `GetPortfolioInterestScheduleUseCase(repository: BondRepository)` -> `List<InterestPayment>` (combines payments from all bonds, sorted)
     *   [x] `GetMonthlyInterestSummaryUseCase(...)` -> `Map<YearMonth, Double>`
     *   [x] `GetYearlyInterestSummaryUseCase(...)` -> `Map<Int, Double>`
-*   [ ] 3. **Yield Calculation Logic:**
-    *   [ ] Create `YieldCalculator` utility class/functions in `shared/commonMain`.
-    *   [ ] Implement Average Coupon Rate calculation (weighted).
-    *   [ ] Implement Average Current Yield calculation (weighted, based on purchase price).
-    *   [ ] Research and implement Average YTM calculation (this is complex - consider using a library if available or a standard iterative formula). Decide on weighting method (initial cost vs. face value).
-*   [ ] 4. **Domain Layer:** Create Use Cases:
-    *   [ ] `CalculateAverageYieldUseCase(repository: BondRepository, type: YieldType)` -> `Double`
+*   [x] 3. **Yield Calculation Logic:**
+    *   [x] Create `YieldCalculator` utility class/functions in `shared/commonMain`.
+    *   [x] Implement Average Coupon Rate calculation (weighted).
+    *   [x] Implement Average Current Yield calculation (weighted, based on purchase price).
+    *   [x] Research and implement Average YTM calculation (this is complex - consider using a library if available or a standard iterative formula). Decide on weighting method (initial cost vs. face value).
+*   [x] 4. **Domain Layer:** Create Use Cases:
+    *   [x] `CalculateAverageYieldUseCase(repository: BondRepository, type: YieldType)` -> `Double`
 
 ## Phase 4: Android UI - Portfolio Overview & Interest Tracking
 
