@@ -12,20 +12,42 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
- * ViewModel for the Bond Details screen
+ * ViewModel interface for the Bond Details screen
  */
-class BondDetailsViewModel(
+interface BondDetailsViewModel {
+    val uiState: StateFlow<BondDetailsUiState>
+    
+    /**
+     * Load bond details by ID
+     */
+    fun loadBondDetails(bondId: Long)
+    
+    /**
+     * Toggle the delete confirmation dialog
+     */
+    fun toggleDeleteConfirmDialog(show: Boolean)
+    
+    /**
+     * Delete the current bond
+     */
+    fun deleteBond(onComplete: () -> Unit)
+}
+
+/**
+ * Implementation of the BondDetailsViewModel
+ */
+class BondDetailsViewModelImpl(
     private val getBondDetailsUseCase: GetBondDetailsUseCase,
     private val deleteBondUseCase: DeleteBondUseCase
-) : ViewModel() {
+) : ViewModel(), BondDetailsViewModel {
 
     private val _uiState = MutableStateFlow(BondDetailsUiState())
-    val uiState: StateFlow<BondDetailsUiState> = _uiState.asStateFlow()
+    override val uiState: StateFlow<BondDetailsUiState> = _uiState.asStateFlow()
 
     /**
      * Load bond details by ID
      */
-    fun loadBondDetails(bondId: Long) {
+    override fun loadBondDetails(bondId: Long) {
         _uiState.update { it.copy(isLoading = true, error = null) }
         
         viewModelScope.launch {
@@ -62,14 +84,14 @@ class BondDetailsViewModel(
     /**
      * Toggle the delete confirmation dialog
      */
-    fun toggleDeleteConfirmDialog(show: Boolean) {
+    override fun toggleDeleteConfirmDialog(show: Boolean) {
         _uiState.update { it.copy(showDeleteConfirmDialog = show) }
     }
 
     /**
      * Delete the current bond
      */
-    fun deleteBond(onComplete: () -> Unit) {
+    override fun deleteBond(onComplete: () -> Unit) {
         val bondId = uiState.value.bond?.id ?: return
         
         viewModelScope.launch {

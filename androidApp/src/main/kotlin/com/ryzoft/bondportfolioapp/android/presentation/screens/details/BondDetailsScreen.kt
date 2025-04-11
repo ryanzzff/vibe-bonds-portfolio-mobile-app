@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,14 +26,23 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ryzoft.bondportfolioapp.android.di.UseCaseProvider
+import com.ryzoft.bondportfolioapp.shared.domain.model.Bond
+import com.ryzoft.bondportfolioapp.shared.domain.model.BondType
+import com.ryzoft.bondportfolioapp.shared.domain.model.PaymentFrequency
+import java.text.NumberFormat
+import java.util.Locale
+import kotlinx.datetime.toJavaLocalDate
+import java.time.format.DateTimeFormatter
 
 /**
  * Bond Details Screen - Displays the detailed information about a specific bond
@@ -43,10 +53,15 @@ fun BondDetailsScreen(
     bondId: Long,
     onBackClick: () -> Unit,
     onEditClick: () -> Unit,
-    // The ViewModel will be injected later
+    viewModel: BondDetailsViewModel = createViewModel()
 ) {
-    // This variable will be handled by the ViewModel later
-    var showDeleteConfirmation by remember { mutableStateOf(false) }
+    // Load bond details when the screen is first displayed
+    LaunchedEffect(bondId) {
+        viewModel.loadBondDetails(bondId)
+    }
+    
+    // Observe the UI state
+    val uiState by viewModel.uiState.collectAsState()
     
     Scaffold(
         topBar = {
@@ -61,16 +76,22 @@ fun BondDetailsScreen(
                     }
                 },
                 actions = {
-                    // Edit button
-                    IconButton(onClick = onEditClick) {
+                    // Edit button - only enabled if bond is loaded
+                    IconButton(
+                        onClick = onEditClick,
+                        enabled = uiState.bond != null
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Edit Bond"
                         )
                     }
                     
-                    // Delete button
-                    IconButton(onClick = { showDeleteConfirmation = true }) {
+                    // Delete button - only enabled if bond is loaded
+                    IconButton(
+                        onClick = { viewModel.toggleDeleteConfirmDialog(true) },
+                        enabled = uiState.bond != null
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = "Delete Bond"
@@ -80,8 +101,6 @@ fun BondDetailsScreen(
             )
         }
     ) { paddingValues ->
-        // This is a placeholder. In the actual implementation, we'll observe the ViewModel's state
-        // and display the actual bond details
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -89,55 +108,33 @@ fun BondDetailsScreen(
                 .padding(16.dp),
             contentAlignment = Alignment.TopCenter
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Text(
-                    text = "Bond Details (ID: $bondId)",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
-                )
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                // Placeholder content - will be replaced with actual bond details
-                Card(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        // In the final implementation, these will display actual bond data
-                        DetailItem(label = "Bond Name", value = "Example Bond")
-                        DetailItem(label = "ISIN", value = "US123456AB12")
-                        DetailItem(label = "Type", value = "Corporate Bond")
-                        DetailItem(label = "Face Value", value = "$10,000")
-                        DetailItem(label = "Quantity", value = "5")
-                        DetailItem(label = "Purchase Price", value = "$9,800")
-                        DetailItem(label = "Coupon Rate", value = "5.5%")
-                        DetailItem(label = "Payment Frequency", value = "Semi-Annual")
-                        DetailItem(label = "Issue Date", value = "Jan 15, 2020")
-                        DetailItem(label = "Maturity Date", value = "Dec 31, 2030")
-                        DetailItem(label = "Total Investment", value = "$49,000")
-                        DetailItem(label = "Current Yield", value = "5.61%")
-                    }
+            when {
+                uiState.isLoading -> {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
+                uiState.error != null -> {
+                    Text(
+                        text = uiState.error ?: "Unknown error",
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+                uiState.bond != null -> {
+                    BondDetailsContent(bond = uiState.bond!!)
                 }
             }
         }
         
         // Delete Confirmation Dialog
-        if (showDeleteConfirmation) {
+        if (uiState.showDeleteConfirmDialog) {
             AlertDialog(
-                onDismissRequest = { showDeleteConfirmation = false },
+                onDismissRequest = { viewModel.toggleDeleteConfirmDialog(false) },
                 title = { Text("Delete Bond") },
                 text = { Text("Are you sure you want to delete this bond from your portfolio?") },
                 confirmButton = {
                     Button(
                         onClick = {
-                            // Will be implemented with ViewModel later
-                            showDeleteConfirmation = false
-                            // Navigate back after deletion
-                            onBackClick()
+                            viewModel.deleteBond(onComplete = onBackClick)
                         }
                     ) {
                         Text("Delete")
@@ -145,12 +142,67 @@ fun BondDetailsScreen(
                 },
                 dismissButton = {
                     TextButton(
-                        onClick = { showDeleteConfirmation = false }
+                        onClick = { viewModel.toggleDeleteConfirmDialog(false) }
                     ) {
                         Text("Cancel")
                     }
                 }
             )
+        }
+    }
+}
+
+@Composable
+private fun BondDetailsContent(bond: Bond) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+    ) {
+        Text(
+            text = bond.name ?: bond.issuerName,
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold
+        )
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                // Basic Information
+                DetailItem(label = "Issuer", value = bond.issuerName)
+                if (bond.name != null && bond.name != bond.issuerName) {
+                    DetailItem(label = "Bond Name", value = bond.name!!)
+                }
+                if (bond.isin != null) {
+                    DetailItem(label = "ISIN", value = bond.isin!!)
+                }
+                DetailItem(label = "Type", value = getBondTypeDisplayName(bond.bondType))
+                
+                // Financial Details
+                DetailItem(label = "Face Value (Per Bond)", value = formatCurrency(bond.faceValuePerBond))
+                DetailItem(label = "Quantity", value = bond.quantityPurchased.toString())
+                DetailItem(label = "Total Face Value", value = formatCurrency(bond.faceValuePerBond * bond.quantityPurchased))
+                DetailItem(label = "Purchase Price", value = formatCurrency(bond.purchasePrice))
+                DetailItem(label = "Total Investment", value = formatCurrency(bond.purchasePrice * bond.quantityPurchased))
+                DetailItem(label = "Coupon Rate", value = "${formatPercentage(bond.couponRate)}")
+                DetailItem(label = "Payment Frequency", value = getPaymentFrequencyDisplayName(bond.paymentFrequency))
+                
+                // Dates
+                DetailItem(label = "Purchase Date", value = formatDate(bond.purchaseDate))
+                DetailItem(label = "Maturity Date", value = formatDate(bond.maturityDate))
+                
+                // Current Yield
+                val currentYield = bond.couponRate * bond.faceValuePerBond / bond.purchasePrice
+                DetailItem(label = "Current Yield", value = "${formatPercentage(currentYield)}")
+                
+                // Notes (if any)
+                if (!bond.notes.isNullOrBlank()) {
+                    DetailItem(label = "Notes", value = bond.notes!!)
+                }
+            }
         }
     }
 }
@@ -177,4 +229,54 @@ private fun DetailItem(
         )
     }
     Spacer(modifier = Modifier.height(8.dp))
+}
+
+/**
+ * Helper function to create the ViewModel with proper dependencies
+ */
+@Composable
+private fun createViewModel(): BondDetailsViewModel {
+    val context = LocalContext.current
+    val getBondDetailsUseCase = UseCaseProvider.provideGetBondDetailsUseCase(context)
+    val deleteBondUseCase = UseCaseProvider.provideDeleteBondUseCase(context)
+    return viewModel<BondDetailsViewModelImpl>(
+        factory = BondDetailsViewModelFactory(
+            getBondDetailsUseCase = getBondDetailsUseCase,
+            deleteBondUseCase = deleteBondUseCase
+        )
+    )
+}
+
+// Helper functions
+private fun formatCurrency(amount: Double): String {
+    val currencyFormat = NumberFormat.getCurrencyInstance(Locale.US)
+    return currencyFormat.format(amount)
+}
+
+private fun formatPercentage(value: Double): String {
+    return String.format("%.2f%%", value * 100)
+}
+
+private fun formatDate(date: kotlinx.datetime.LocalDate): String {
+    val formatter = DateTimeFormatter.ofPattern("MMM d, yyyy")
+    return formatter.format(date.toJavaLocalDate())
+}
+
+private fun getBondTypeDisplayName(bondType: BondType): String {
+    return when (bondType) {
+        BondType.TREASURY -> "Treasury"
+        BondType.CORPORATE -> "Corporate"
+        BondType.MUNICIPAL -> "Municipal"
+        BondType.AGENCY -> "Agency"
+    }
+}
+
+private fun getPaymentFrequencyDisplayName(frequency: PaymentFrequency): String {
+    return when (frequency) {
+        PaymentFrequency.ANNUAL -> "Annual"
+        PaymentFrequency.SEMI_ANNUAL -> "Semi-Annual"
+        PaymentFrequency.QUARTERLY -> "Quarterly"
+        PaymentFrequency.MONTHLY -> "Monthly"
+        PaymentFrequency.ZERO_COUPON -> "Zero Coupon"
+    }
 }

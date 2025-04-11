@@ -53,7 +53,7 @@ class BondDetailsViewModelTest {
         whenever(getBondDetailsUseCase(bondId)).thenReturn(testBond)
 
         // When
-        viewModel = BondDetailsViewModel(getBondDetailsUseCase, deleteBondUseCase)
+        viewModel = BondDetailsViewModelImpl(getBondDetailsUseCase, deleteBondUseCase)
         viewModel.loadBondDetails(bondId)
 
         // Then
@@ -70,7 +70,7 @@ class BondDetailsViewModelTest {
         whenever(getBondDetailsUseCase(bondId)).thenReturn(null)
 
         // When
-        viewModel = BondDetailsViewModel(getBondDetailsUseCase, deleteBondUseCase)
+        viewModel = BondDetailsViewModelImpl(getBondDetailsUseCase, deleteBondUseCase)
         viewModel.loadBondDetails(bondId)
 
         // Then
@@ -85,7 +85,7 @@ class BondDetailsViewModelTest {
         val bondId = 1L
         val testBond = createTestBond(bondId)
         whenever(getBondDetailsUseCase(bondId)).thenReturn(testBond)
-        viewModel = BondDetailsViewModel(getBondDetailsUseCase, deleteBondUseCase)
+        viewModel = BondDetailsViewModelImpl(getBondDetailsUseCase, deleteBondUseCase)
         viewModel.loadBondDetails(bondId)
 
         // When - Show dialog
@@ -107,7 +107,7 @@ class BondDetailsViewModelTest {
         val bondId = 1L
         val testBond = createTestBond(bondId)
         whenever(getBondDetailsUseCase(bondId)).thenReturn(testBond)
-        viewModel = BondDetailsViewModel(getBondDetailsUseCase, deleteBondUseCase)
+        viewModel = BondDetailsViewModelImpl(getBondDetailsUseCase, deleteBondUseCase)
         viewModel.loadBondDetails(bondId)
 
         // When
