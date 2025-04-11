@@ -15,8 +15,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val databaseFactory = DatabaseDriverFactory()
-        databaseFactory.init(applicationContext)
+        // Initialize database driver factory with application context
+        val databaseFactory = DatabaseDriverFactory(applicationContext)
 
         setContent {
             MaterialTheme {

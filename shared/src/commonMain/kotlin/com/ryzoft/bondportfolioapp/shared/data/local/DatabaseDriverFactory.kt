@@ -5,9 +5,10 @@ import kotlin.ExperimentalStdlibApi
 
 /**
  * Expected factory for creating platform-specific SQLDelight drivers.
+ * Platform-specific implementations may have additional constructor parameters.
  */
 @OptIn(ExperimentalStdlibApi::class)
-expect class DatabaseDriverFactory() {
+expect class DatabaseDriverFactory {
     /**
      * Creates the platform-specific SqlDriver.
      */

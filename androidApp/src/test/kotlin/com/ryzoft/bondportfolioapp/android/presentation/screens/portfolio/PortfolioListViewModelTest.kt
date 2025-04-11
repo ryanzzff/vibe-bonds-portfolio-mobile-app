@@ -31,7 +31,7 @@ import org.mockito.kotlin.whenever
 class PortfolioListViewModelTest {
 
     private lateinit var getBondsUseCase: GetBondsUseCase
-    private lateinit var viewModel: PortfolioListViewModel
+    private lateinit var viewModel: PortfolioListViewModelImpl
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
@@ -52,7 +52,7 @@ class PortfolioListViewModelTest {
         whenever(getBondsUseCase()).thenReturn(flowOf(testBonds))
 
         // When
-        viewModel = PortfolioListViewModel(getBondsUseCase)
+        viewModel = PortfolioListViewModelImpl(getBondsUseCase)
 
         // Then
         assertEquals(testBonds, viewModel.uiState.value.bonds)
@@ -67,7 +67,7 @@ class PortfolioListViewModelTest {
         whenever(getBondsUseCase()).thenReturn(flowOf(emptyList))
 
         // When
-        viewModel = PortfolioListViewModel(getBondsUseCase)
+        viewModel = PortfolioListViewModelImpl(getBondsUseCase)
 
         // Then
         assertEquals(emptyList, viewModel.uiState.value.bonds)
@@ -84,7 +84,7 @@ class PortfolioListViewModelTest {
         })
 
         // When
-        viewModel = PortfolioListViewModel(getBondsUseCase)
+        viewModel = PortfolioListViewModelImpl(getBondsUseCase)
 
         // Then
         assertEquals(emptyList<Bond>(), viewModel.uiState.value.bonds)

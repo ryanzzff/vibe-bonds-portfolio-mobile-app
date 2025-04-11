@@ -10,12 +10,7 @@ import kotlin.ExperimentalStdlibApi
  * Actual implementation of the DatabaseDriverFactory for Android.
  */
 @OptIn(ExperimentalStdlibApi::class)
-actual class DatabaseDriverFactory actual constructor() {
-    private lateinit var context: Context
-
-    fun init(context: Context) {
-        this.context = context
-    }
+actual class DatabaseDriverFactory(private val context: Context) {
 
     actual fun createDriver(): SqlDriver {
         return AndroidSqliteDriver(

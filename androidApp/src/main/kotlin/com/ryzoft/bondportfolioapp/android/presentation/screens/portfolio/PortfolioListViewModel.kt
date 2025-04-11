@@ -13,14 +13,22 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
- * ViewModel for the Portfolio List screen
+ * Interface for the Portfolio List screen ViewModel
  */
-class PortfolioListViewModel(
+interface PortfolioListViewModel {
+    val uiState: StateFlow<PortfolioListUiState>
+    fun loadBonds()
+}
+
+/**
+ * Implementation of the PortfolioListViewModel
+ */
+class PortfolioListViewModelImpl(
     private val getBondsUseCase: GetBondsUseCase
-) : ViewModel() {
+) : ViewModel(), PortfolioListViewModel {
 
     private val _uiState = MutableStateFlow(PortfolioListUiState())
-    val uiState: StateFlow<PortfolioListUiState> = _uiState.asStateFlow()
+    override val uiState: StateFlow<PortfolioListUiState> = _uiState.asStateFlow()
 
     init {
         loadBonds()
@@ -29,7 +37,7 @@ class PortfolioListViewModel(
     /**
      * Load all bonds in the portfolio
      */
-    fun loadBonds() {
+    override fun loadBonds() {
         viewModelScope.launch {
             getBondsUseCase()
                 .onStart { 

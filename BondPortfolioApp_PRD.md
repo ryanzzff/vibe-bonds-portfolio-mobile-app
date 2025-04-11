@@ -97,6 +97,7 @@ This document outlines the requirements for the Vibe Bond Portfolio Tracker mobi
 
 ## 6. Design & UI/UX (High-Level)
 
+*   **Design Style:** Flat design with clean lines, minimal shadows, and a focus on typography and color to create visual hierarchy. Use simple, recognizable icons and ample whitespace to enhance readability and usability.
 *   **Navigation:** Bottom Navigation Bar likely suitable. Tabs: Portfolio, Interest Schedule, Calendar (or integrate Calendar into Interest Schedule), Add Bond (+ Button).
 *   **Screens:**
     *   `Portfolio List`: Main dashboard. List of bonds, summary cards for Total Value / Avg. Yield. Filter options accessible.
@@ -104,7 +105,7 @@ This document outlines the requirements for the Vibe Bond Portfolio Tracker mobi
     *   `Add/Edit Bond Form`: Clean form with appropriate input types (date pickers, number pads, dropdowns).
     *   `Interest Schedule`: List of all upcoming payments, Monthly/Yearly summary toggles/tabs.
     *   `Interest Calendar`: Visual calendar highlighting payment dates.
-*   **Theme:** Clean, modern, finance-appropriate aesthetic.
+*   **Theme:** Clean, modern, finance-appropriate aesthetic with a flat design approach. Use a limited color palette with primary brand colors and accent colors for important information or actions.
 
 ## 7. Future Considerations
 

@@ -40,13 +40,17 @@ This list outlines the steps to build the Bond Portfolio Tracker app using Kotli
 ## Phase 2: Android UI - Bond Management (androidApp Module)
 
 *   [x] 1. **Navigation:** Set up basic Jetpack Compose Navigation Host with initial screens (PortfolioList, AddBond, BondDetails).
-*   [ ] 2. **Portfolio List Screen:**
-    *   [ ] Create `PortfolioListViewModel` (Android ViewModel). Inject `GetBondsUseCase`.
-    *   [ ] Expose bond list state (e.g., using `StateFlow<List<Bond>>`).
-    *   [ ] Create `PortfolioListScreen` Composable. Observe ViewModel state.
-    *   [ ] Display bonds in a `LazyColumn`. Show key info (FR2.1).
-    *   [ ] Add a Floating Action Button (FAB) to navigate to Add Bond screen.
-    *   [ ] Implement item click navigation to Bond Details screen.
+*   [x] 2. **Portfolio List Screen:**
+    *   [x] Create `PortfolioListViewModel` (Android ViewModel). Inject `GetBondsUseCase`.
+    *   [x] Expose bond list state (e.g., using `StateFlow<List<Bond>>`).
+    *   [x] Create `PortfolioListScreen` Composable. Observe ViewModel state.
+    *   [x] Display bonds in a `LazyColumn`. Show key info (FR2.1).
+    *   [x] Add a Floating Action Button (FAB) to navigate to Add Bond screen.
+    *   [x] Implement item click navigation to Bond Details screen.
+    *   [x] Implement flat design style with minimal elevation, clean typography, and simple UI elements.
+    *   [x] Add portfolio summary section with total investment, face value, and average coupon rate.
+    *   [x] Add bond type filtering functionality.
+    *   [x] Create comprehensive unit and UI tests.
 *   [ ] 3. **Add/Edit Bond Screen:**
     *   [ ] Create `AddEditBondViewModel`. Inject `AddBondUseCase`, `UpdateBondUseCase`, `GetBondDetailsUseCase` (for editing).
     *   [ ] Manage form input state (consider a `BondDraft` state class).
