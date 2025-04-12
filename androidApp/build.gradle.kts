@@ -32,6 +32,7 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -52,6 +53,13 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+
+    // Add packagingOptions to handle duplicate files from mockito dependencies
+    packagingOptions {
+        // Use pickFirst to resolve conflicts for Mockito plugin files
+        resources.pickFirsts.add("mockito-extensions/org.mockito.plugins.MemberAccessor")
+        resources.pickFirsts.add("mockito-extensions/org.mockito.plugins.MockMaker")
     }
 
     configurations.all {
@@ -83,17 +91,25 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
     implementation("androidx.navigation:navigation-compose:2.7.7")
+    
+    // Calendar library for Interest Calendar Screen
+    implementation("com.kizitonwose.calendar:compose:2.5.1")
+    
+    // Desugaring support for java.time API
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:5.3.1")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     androidTestImplementation("org.mockito:mockito-android:5.3.1")
-    androidTestImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
+    androidTestImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+    // Add mockito-inline for mocking final classes/methods in Android tests
+    androidTestImplementation("org.mockito:mockito-inline:5.2.0")
     
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")

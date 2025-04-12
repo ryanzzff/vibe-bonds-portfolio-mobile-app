@@ -102,13 +102,13 @@ This list outlines the steps to build the Bond Portfolio Tracker app using Kotli
     *   [x] Add Tabs/Toggles for "Upcoming Payments", "Monthly Summary", "Yearly Summary".
     *   [x] Display list of all upcoming portfolio payments (FR3.2).
     *   [x] Display monthly/yearly summaries (FR3.3).
-*   [ ] 3. **Interest Calendar Screen:**
-    *   [ ] Find/choose a KMP-compatible or Android-specific Calendar Compose library.
-    *   [ ] Create `InterestCalendarViewModel`. Inject `GetPortfolioInterestScheduleUseCase`.
-    *   [ ] Create `InterestCalendarScreen` Composable.
-    *   [ ] Fetch all interest payments, process dates.
-    *   [ ] Display calendar, highlighting dates with payments (FR3.4).
-    *   [ ] Implement date selection to show payments due on that day.
+*   [x] 3. **Interest Calendar Screen:**
+    *   [x] Find/choose a KMP-compatible or Android-specific Calendar Compose library.
+    *   [x] Create `InterestCalendarViewModel`. Inject `GetPortfolioInterestScheduleUseCase`.
+    *   [x] Create `InterestCalendarScreen` Composable.
+    *   [x] Fetch all interest payments, process dates.
+    *   [x] Display calendar, highlighting dates with payments (FR3.4).
+    *   [x] Implement date selection to show payments due on that day.
 
 ## Phase 5: Refinement & Testing
 

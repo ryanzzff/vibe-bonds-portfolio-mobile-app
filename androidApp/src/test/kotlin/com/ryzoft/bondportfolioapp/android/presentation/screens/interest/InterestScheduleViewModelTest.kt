@@ -8,25 +8,25 @@ import com.ryzoft.bondportfolioapp.shared.domain.usecase.YearMonth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class InterestScheduleViewModelTest {
     
-    private val testDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
     private lateinit var getPortfolioInterestScheduleUseCase: GetPortfolioInterestScheduleUseCase
     private lateinit var getMonthlyInterestSummaryUseCase: GetMonthlyInterestSummaryUseCase
     private lateinit var getYearlyInterestSummaryUseCase: GetYearlyInterestSummaryUseCase
@@ -79,11 +79,11 @@ class InterestScheduleViewModelTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
     }
     
     @Test
-    fun `initial state should load data correctly`() = testDispatcher.runBlockingTest {
+    fun `initial state should load data correctly`() = runTest {
+        testDispatcher.scheduler.advanceUntilIdle()
         val state = viewModel.uiState.value
         
         // Verify initial state
@@ -96,11 +96,13 @@ class InterestScheduleViewModelTest {
         assertEquals(150.0, state.yearlySummary[2025])
         assertEquals(300.0, state.yearlySummary[2026])
         assertNull(state.error)
-        assertEquals(false, state.isLoading)
+        assertFalse(state.isLoading)
     }
     
     @Test
-    fun `setActiveTab should update state correctly`() = testDispatcher.runBlockingTest {
+    fun `setActiveTab should update state correctly`() = runTest {
+        testDispatcher.scheduler.advanceUntilIdle()
+        
         // When changing tab to Monthly Summary
         viewModel.setActiveTab(InterestScheduleTab.MONTHLY_SUMMARY)
         
