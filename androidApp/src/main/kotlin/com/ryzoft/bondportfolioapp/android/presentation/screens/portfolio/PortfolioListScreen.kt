@@ -79,7 +79,7 @@ fun PortfolioListScreen(
     }
     
     // Calculate portfolio summary values
-    val totalInvestment = filteredBonds.sumOf { it.purchasePrice * it.quantityPurchased }
+    val totalInvestment = filteredBonds.sumOf { it.purchasePrice / 100 * it.faceValuePerBond * it.quantityPurchased }
     val totalFaceValue = filteredBonds.sumOf { it.faceValuePerBond * it.quantityPurchased }
     val averageCouponRate = if (filteredBonds.isNotEmpty()) {
         filteredBonds.sumOf { it.couponRate * it.faceValuePerBond * it.quantityPurchased } / totalFaceValue

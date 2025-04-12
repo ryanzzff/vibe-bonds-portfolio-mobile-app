@@ -182,11 +182,11 @@ private fun BondDetailsContent(bond: Bond) {
                 DetailItem(label = "Type", value = getBondTypeDisplayName(bond.bondType))
                 
                 // Financial Details
-                DetailItem(label = "Face Value (Per Bond)", value = formatCurrency(bond.faceValuePerBond))
+                DetailItem(label = "Face Value Per Bond", value = formatCurrency(bond.faceValuePerBond))
                 DetailItem(label = "Quantity", value = bond.quantityPurchased.toString())
                 DetailItem(label = "Total Face Value", value = formatCurrency(bond.faceValuePerBond * bond.quantityPurchased))
                 DetailItem(label = "Purchase Price", value = formatCurrency(bond.purchasePrice))
-                DetailItem(label = "Total Investment", value = formatCurrency(bond.purchasePrice * bond.quantityPurchased))
+                DetailItem(label = "Total Investment", value = formatCurrency(bond.purchasePrice / 100 * bond.faceValuePerBond * bond.quantityPurchased))
                 DetailItem(label = "Coupon Rate", value = "${formatPercentage(bond.couponRate)}")
                 DetailItem(label = "Payment Frequency", value = getPaymentFrequencyDisplayName(bond.paymentFrequency))
                 
