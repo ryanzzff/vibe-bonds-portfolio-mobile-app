@@ -95,6 +95,13 @@ class AddEditBondViewModelTest {
         // Given
         viewModel = AddEditBondViewModelImpl(addBondUseCase, updateBondUseCase, getBondDetailsUseCase)
         viewModel.initialize(null)
+        
+        // Explicitly set empty values to ensure the test properly tests for empty fields
+        viewModel.updateName("")
+        viewModel.updateFaceValue("")
+        viewModel.updateQuantity("")
+        viewModel.updatePurchasePrice("")
+        viewModel.updateCouponRate("")
 
         // When - All fields empty
         val isValid = viewModel.validateForm()
@@ -102,7 +109,6 @@ class AddEditBondViewModelTest {
         // Then
         assertFalse(isValid)
         assertEquals(true, viewModel.uiState.value.nameError)
-        // Issuer name is now optional, so we expect issuerError to be false
         assertEquals(false, viewModel.uiState.value.issuerError)
         assertEquals(true, viewModel.uiState.value.faceValueError)
         assertEquals(true, viewModel.uiState.value.quantityError)

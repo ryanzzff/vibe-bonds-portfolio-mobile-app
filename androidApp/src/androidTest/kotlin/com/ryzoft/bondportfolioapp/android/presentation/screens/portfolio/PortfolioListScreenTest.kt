@@ -131,6 +131,62 @@ class PortfolioListScreenTest {
         composeTestRule.onNodeWithText("Test TREASURY Bond").assertIsDisplayed()
     }
 
+    @Test
+    fun testCouponRatePercentageDisplay() {
+        // Setup - create bonds with specific coupon rates to test percentage display
+        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val later = now.plus(5, DateTimeUnit.YEAR)
+        
+        val testBonds = listOf(
+            Bond(
+                id = 1,
+                name = "5% Corporate Bond",
+                issuerName = "Test Corp",
+                bondType = BondType.CORPORATE,
+                faceValuePerBond = 1000.0,
+                quantityPurchased = 5,
+                purchasePrice = 980.0,
+                purchaseDate = now,
+                maturityDate = later,
+                couponRate = 0.05, // 5% stored as decimal
+                paymentFrequency = PaymentFrequency.SEMI_ANNUAL,
+                notes = null,
+                isin = null
+            ),
+            Bond(
+                id = 2,
+                name = "4.25% Treasury Bond",
+                issuerName = "Test Treasury",
+                bondType = BondType.TREASURY,
+                faceValuePerBond = 1000.0,
+                quantityPurchased = 10,
+                purchasePrice = 1000.0,
+                purchaseDate = now,
+                maturityDate = later,
+                couponRate = 0.0425, // 4.25% stored as decimal
+                paymentFrequency = PaymentFrequency.ANNUAL,
+                notes = null,
+                isin = null
+            )
+        )
+        
+        val viewModel = TestPortfolioListViewModel(testBonds)
+
+        // Launch the screen
+        composeTestRule.setContent {
+            PortfolioListScreen(
+                onBondClick = {},
+                onAddBondClick = {},
+                viewModel = viewModel
+            )
+        }
+
+        // Verify coupon rates are displayed correctly as percentages
+        // This ensures the decimal values are correctly multiplied by 100
+        composeTestRule.onNodeWithText("5.00%").assertIsDisplayed() // For the 5% bond
+        composeTestRule.onNodeWithText("4.25%").assertIsDisplayed() // For the 4.25% bond
+    }
+
     /**
      * Test implementation of PortfolioListViewModel that doesn't require mocking
      */

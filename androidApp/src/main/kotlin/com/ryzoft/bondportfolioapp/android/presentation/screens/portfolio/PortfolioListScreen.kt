@@ -176,7 +176,7 @@ fun PortfolioListScreen(
                     
                     SummaryItem(
                         label = "Average Coupon Rate",
-                        value = "${String.format("%.2f", averageCouponRate)}%"
+                        value = "${String.format("%.2f", averageCouponRate * 100)}%"
                     )
                 }
             }
@@ -283,7 +283,7 @@ fun YieldSelector(
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = "${String.format("%.2f", yieldValue)}%",
+                text = "${String.format("%.2f", yieldValue * 100)}%",
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
@@ -449,7 +449,7 @@ fun BondListItem(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "${String.format("%.2f", bond.couponRate)}%",
+                        text = "${String.format("%.2f", bond.couponRate * 100)}%",
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium
                     )

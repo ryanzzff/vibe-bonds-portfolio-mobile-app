@@ -187,7 +187,7 @@ private fun BondDetailsContent(bond: Bond) {
                 DetailItem(label = "Total Face Value", value = formatCurrency(bond.faceValuePerBond * bond.quantityPurchased))
                 DetailItem(label = "Purchase Price", value = formatCurrency(bond.purchasePrice))
                 DetailItem(label = "Total Investment", value = formatCurrency(bond.purchasePrice / 100 * bond.faceValuePerBond * bond.quantityPurchased))
-                DetailItem(label = "Coupon Rate", value = "${formatPercentage(bond.couponRate)}")
+                DetailItem(label = "Coupon Rate", value = formatPercentage(bond.couponRate))
                 DetailItem(label = "Payment Frequency", value = getPaymentFrequencyDisplayName(bond.paymentFrequency))
                 
                 // Dates
@@ -195,8 +195,12 @@ private fun BondDetailsContent(bond: Bond) {
                 DetailItem(label = "Maturity Date", value = formatDate(bond.maturityDate))
                 
                 // Current Yield
-                val currentYield = bond.couponRate * bond.faceValuePerBond / bond.purchasePrice
-                DetailItem(label = "Current Yield", value = "${formatPercentage(currentYield)}")
+                val currentYield = if (bond.purchasePrice > 0) {
+                    (bond.couponRate * bond.faceValuePerBond) / bond.purchasePrice
+                } else {
+                    0.0
+                }
+                DetailItem(label = "Current Yield", value = formatPercentage(currentYield))
                 
                 // Notes (if any)
                 if (!bond.notes.isNullOrBlank()) {
@@ -254,7 +258,8 @@ private fun formatCurrency(amount: Double): String {
 }
 
 private fun formatPercentage(value: Double): String {
-    return String.format("%.2f%%", value * 100)
+    // Use Locale.US to ensure consistent formatting (e.g., decimal point)
+    return String.format(Locale.US, "%.2f%%", value * 100)
 }
 
 private fun formatDate(date: kotlinx.datetime.LocalDate): String {
