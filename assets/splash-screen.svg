@@ -1,0 +1,32 @@
+<svg width="400" height="800" viewBox="0 0 400 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1A2980; stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#26D0CE; stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="iconGradientSplash" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6A11CB; stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2575FC; stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="lineGradientSplash" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFDEE9; stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B5FFFC; stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="800" fill="url(#bgGradient)" />
+
+  <!-- Centered Icon (scaled up) -->
+  <g transform="translate(125, 325) scale(1.5)">
+    <!-- Background Circle -->
+    <circle cx="50" cy="50" r="48" fill="url(#iconGradientSplash)" />
+    <!-- Stylized 'V' and Graph Line -->
+    <path d="M 25 35 L 50 65 L 75 35" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="35,60 50,45 65,55 80,40" fill="none" stroke="url(#lineGradientSplash)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- App Name Text -->
+  <text x="200" y="550" font-family="Arial, sans-serif" font-size="24" fill="#FFFFFF" text-anchor="middle">Vibe Bonds</text>
+
+</svg> 
