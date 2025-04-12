@@ -22,6 +22,16 @@ kotlin {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"
+                freeCompilerArgs = listOf("-Xexpect-actual-classes")
+            }
+        }
+    }
+
+    // Add compiler args to all targets
+    targets.all {
+        compilations.all {
+            kotlinOptions {
+                freeCompilerArgs = freeCompilerArgs + listOf("-Xexpect-actual-classes")
             }
         }
     }
