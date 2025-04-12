@@ -124,7 +124,7 @@ fun AddEditBondScreen(
                     
                     // Issuer Name
                     FormTextField(
-                        label = "Issuer Name *",
+                        label = "Issuer Name",  // Removed the asterisk to indicate it's optional
                         value = uiState.issuer,
                         onValueChange = { viewModel.updateIssuer(it) },
                         isError = uiState.issuerError,

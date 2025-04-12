@@ -170,11 +170,7 @@ class AddEditBondViewModelImpl(
             isValid = false
         }
         
-        // Validate issuer
-        if (_uiState.value.issuer.isBlank()) {
-            _uiState.update { it.copy(issuerError = true) }
-            isValid = false
-        }
+        // Issuer name is now optional, so no validation needed
         
         // Validate face value
         val faceValue = _uiState.value.faceValuePerBond.toDoubleOrNull()

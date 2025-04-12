@@ -18,9 +18,8 @@ class AddBondUseCase(private val repository: BondRepository) {
      */
     suspend operator fun invoke(bond: Bond) {
         // Example Validation:
-        if (bond.issuerName.isBlank()) {
-            throw InvalidBondException("Issuer name cannot be empty.")
-        }
+        // Issuer name is now optional, so no validation needed for it
+        
         if (bond.couponRate < 0) {
             throw InvalidBondException("Coupon rate cannot be negative.")
         }
