@@ -96,12 +96,12 @@ This list outlines the steps to build the Bond Portfolio Tracker app using Kotli
     *   [x] Integrate `CalculateAverageYieldUseCase` into `PortfolioListViewModel`.
     *   [x] Add UI elements (e.g., Cards) to display Total Portfolio Value (Initial Cost) and Average Yield (with selection dropdown - FR2.3).
     *   [x] Implement Filter UI (e.g., Chips, Dropdown) for Bond Type (FR4.1). Update ViewModel and UseCase calls to support filtering.
-*   [ ] 2. **Interest Schedule Screen:**
-    *   [ ] Create `InterestScheduleViewModel`. Inject summary/schedule UseCases.
-    *   [ ] Create `InterestScheduleScreen` Composable.
-    *   [ ] Add Tabs/Toggles for "Upcoming Payments", "Monthly Summary", "Yearly Summary".
-    *   [ ] Display list of all upcoming portfolio payments (FR3.2).
-    *   [ ] Display monthly/yearly summaries (FR3.3).
+*   [x] 2. **Interest Schedule Screen:**
+    *   [x] Create `InterestScheduleViewModel`. Inject summary/schedule UseCases.
+    *   [x] Create `InterestScheduleScreen` Composable.
+    *   [x] Add Tabs/Toggles for "Upcoming Payments", "Monthly Summary", "Yearly Summary".
+    *   [x] Display list of all upcoming portfolio payments (FR3.2).
+    *   [x] Display monthly/yearly summaries (FR3.3).
 *   [ ] 3. **Interest Calendar Screen:**
     *   [ ] Find/choose a KMP-compatible or Android-specific Calendar Compose library.
     *   [ ] Create `InterestCalendarViewModel`. Inject `GetPortfolioInterestScheduleUseCase`.

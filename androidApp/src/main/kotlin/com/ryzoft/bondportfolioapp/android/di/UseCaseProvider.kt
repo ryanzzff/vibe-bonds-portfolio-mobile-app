@@ -108,7 +108,7 @@ object UseCaseProvider {
     /**
      * Get or create the GetPortfolioInterestScheduleUseCase instance
      */
-    private fun provideGetPortfolioInterestScheduleUseCase(context: Context): GetPortfolioInterestScheduleUseCase {
+    fun provideGetPortfolioInterestScheduleUseCase(context: Context): GetPortfolioInterestScheduleUseCase {
         return getPortfolioInterestScheduleUseCase ?: synchronized(this) {
             getPortfolioInterestScheduleUseCase ?: GetPortfolioInterestScheduleUseCase(provideBondRepository(context))
                 .also { getPortfolioInterestScheduleUseCase = it }

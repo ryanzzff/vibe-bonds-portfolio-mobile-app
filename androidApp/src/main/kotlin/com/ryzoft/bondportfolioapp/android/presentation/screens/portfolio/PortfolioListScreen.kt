@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -65,6 +66,7 @@ import java.util.Locale
 fun PortfolioListScreen(
     onBondClick: (bondId: Long) -> Unit,
     onAddBondClick: () -> Unit,
+    onInterestScheduleClick: () -> Unit = {},
     viewModel: PortfolioListViewModel = createViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -93,7 +95,18 @@ fun PortfolioListScreen(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
-                )
+                ),
+                actions = {
+                    IconButton(
+                        onClick = onInterestScheduleClick
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.CalendarToday,
+                            contentDescription = "Interest Schedule",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {
