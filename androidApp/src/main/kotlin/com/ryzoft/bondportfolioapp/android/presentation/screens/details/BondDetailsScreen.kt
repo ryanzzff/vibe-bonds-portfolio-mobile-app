@@ -189,6 +189,17 @@ private fun BondDetailsContent(bond: Bond) {
                 DetailItem(label = "Total Investment", value = formatCurrency(bond.purchasePrice / 100 * bond.faceValuePerBond * bond.quantityPurchased))
                 DetailItem(label = "Coupon Rate", value = formatPercentage(bond.couponRate))
                 DetailItem(label = "Payment Frequency", value = getPaymentFrequencyDisplayName(bond.paymentFrequency))
+
+                // Next Interest Payment Amount
+                val paymentPerPeriod = bond.faceValuePerBond * bond.couponRate / when (bond.paymentFrequency) {
+                    PaymentFrequency.SEMI_ANNUAL -> 2.0
+                    PaymentFrequency.QUARTERLY -> 4.0
+                    PaymentFrequency.ANNUAL -> 1.0
+                    // Assuming ANNUAL if frequency is somehow null or unknown - adjust if needed
+                    else -> 1.0 
+                }
+                val nextInterestPayment = paymentPerPeriod * bond.quantityPurchased
+                DetailItem(label = "Next Interest Payment", value = formatCurrency(nextInterestPayment))
                 
                 // Dates
                 DetailItem(label = "Purchase Date", value = formatDate(bond.purchaseDate))

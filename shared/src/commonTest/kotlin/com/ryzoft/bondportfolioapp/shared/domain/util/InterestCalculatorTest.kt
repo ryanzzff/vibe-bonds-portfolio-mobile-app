@@ -22,7 +22,7 @@ class InterestCalculatorTest {
         id = 1L,
         bondType = BondType.CORPORATE,
         issuerName = "Test Corp",
-        couponRate = 5.0, // 5% annual coupon
+        couponRate = 0.05, // 5% annual coupon (decimal)
         maturityDate = today.plus(5, DateTimeUnit.YEAR), // 5 years from today
         faceValuePerBond = 1000.0,
         purchaseDate = today.minus(6, DateTimeUnit.MONTH), // Purchased 6 months ago
@@ -50,7 +50,7 @@ class InterestCalculatorTest {
         id = 3L,
         bondType = BondType.MUNICIPAL,
         issuerName = "Test Municipality",
-        couponRate = 3.6, // 3.6% annual coupon
+        couponRate = 0.036, // 3.6% annual coupon (decimal)
         maturityDate = today.plus(2, DateTimeUnit.YEAR),
         faceValuePerBond = 5000.0,
         purchaseDate = today.minus(2, DateTimeUnit.MONTH),

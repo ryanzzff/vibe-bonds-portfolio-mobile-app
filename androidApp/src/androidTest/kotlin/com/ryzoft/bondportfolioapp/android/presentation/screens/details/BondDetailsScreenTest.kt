@@ -272,6 +272,11 @@ class BondDetailsScreenTest {
         // 0.0425 * 1000 / 950 = 0.04473684... which formats to 4.47%
 //        composeTestRule.onNodeWithText("Current Yield").assertIsDisplayed()
 //        composeTestRule.onNodeWithText("4.47%").assertIsDisplayed()
+
+        // Calculate next interest payment: (faceValue * couponRate / frequency) * quantity
+        // (1000 * 0.0425 / 2) * 5 = 21.25 * 5 = 106.25
+        composeTestRule.onNodeWithText("Next Interest Payment").assertIsDisplayed()
+        composeTestRule.onNodeWithText("$106.25").assertIsDisplayed() // Assuming currency formatting
     }
 
     // Mock implementation of BondDetailsViewModel for UI testing

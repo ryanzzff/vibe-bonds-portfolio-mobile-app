@@ -144,8 +144,8 @@ object InterestCalculator {
         }
         
         // Calculate payment amount using the formula:
-        // face_value_per_bond * quantity_purchased * (coupon_rate / 100) / payments_per_year
-        val amount = bond.faceValuePerBond * bond.quantityPurchased * (bond.couponRate / 100.0) / paymentsPerYear
+        // face_value_per_bond * quantity_purchased * coupon_rate / payments_per_year
+        val amount = bond.faceValuePerBond * bond.quantityPurchased * bond.couponRate / paymentsPerYear
         
         // Round to 2 decimal places to handle floating point imprecision
         return round(amount * 100) / 100
