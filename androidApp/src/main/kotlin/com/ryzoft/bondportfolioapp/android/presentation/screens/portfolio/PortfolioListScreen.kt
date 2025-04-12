@@ -1,6 +1,7 @@
 package com.ryzoft.bondportfolioapp.android.presentation.screens.portfolio
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,19 +11,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -48,6 +52,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ryzoft.bondportfolioapp.android.di.UseCaseProvider
 import com.ryzoft.bondportfolioapp.shared.domain.model.Bond
 import com.ryzoft.bondportfolioapp.shared.domain.model.BondType
+import com.ryzoft.bondportfolioapp.shared.domain.model.YieldType
 import java.text.NumberFormat
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -77,6 +82,9 @@ fun PortfolioListScreen(
     val averageCouponRate = if (filteredBonds.isNotEmpty()) {
         filteredBonds.sumOf { it.couponRate * it.faceValuePerBond * it.quantityPurchased } / totalFaceValue
     } else 0.0
+    
+    // Get the selected yield value from the state
+    val selectedYieldValue = uiState.yields[uiState.selectedYieldType] ?: 0.0
     
     Scaffold(
         topBar = {
@@ -144,6 +152,15 @@ fun PortfolioListScreen(
                     
                     Spacer(modifier = Modifier.height(8.dp))
                     
+                    // Yield Selection with Dropdown
+                    YieldSelector(
+                        selectedYieldType = uiState.selectedYieldType,
+                        yieldValue = selectedYieldValue,
+                        onYieldTypeSelected = { viewModel.setSelectedYieldType(it) }
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
                     SummaryItem(
                         label = "Average Coupon Rate",
                         value = "${String.format("%.2f", averageCouponRate)}%"
@@ -205,10 +222,11 @@ fun PortfolioListScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = if (selectedBondType != null) 
-                                "No bonds of type ${selectedBondType?.name ?: ""} found" 
-                            else 
-                                "No bonds in your portfolio yet",
+                            text = if (selectedBondType != null) {
+                                "No ${selectedBondType!!.name.lowercase().capitalize()} bonds in your portfolio"
+                            } else {
+                                "No bonds in your portfolio yet"
+                            },
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }
@@ -222,13 +240,61 @@ fun PortfolioListScreen(
                                 bond = bond,
                                 onBondClick = { onBondClick(bond.id) }
                             )
-                            HorizontalDivider(
-                                color = MaterialTheme.colorScheme.surfaceVariant,
-                                thickness = 1.dp
-                            )
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun YieldSelector(
+    selectedYieldType: YieldType,
+    yieldValue: Double,
+    onYieldTypeSelected: (YieldType) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { expanded = true },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Average ${getYieldTypeDisplayName(selectedYieldType)}:",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = "${String.format("%.2f", yieldValue)}%",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                imageVector = Icons.Default.ArrowDropDown,
+                contentDescription = "Select Yield Type",
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+        
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            YieldType.values().forEach { yieldType ->
+                DropdownMenuItem(
+                    text = { Text(getYieldTypeDisplayName(yieldType)) },
+                    onClick = {
+                        onYieldTypeSelected(yieldType)
+                        expanded = false
+                    }
+                )
             }
         }
     }
@@ -241,101 +307,153 @@ fun PortfolioListScreen(
 private fun createViewModel(): PortfolioListViewModel {
     val context = LocalContext.current
     val getBondsUseCase = UseCaseProvider.provideGetBondsUseCase(context)
-    val factory = PortfolioListViewModelFactory(getBondsUseCase)
+    val calculateAverageYieldUseCase = UseCaseProvider.provideCalculateAverageYieldUseCase(context)
+    val factory = PortfolioListViewModelFactory(getBondsUseCase, calculateAverageYieldUseCase)
     return viewModel(factory = factory)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BondTypeFilter(
+fun BondTypeFilter(
     selectedType: BondType?,
     onTypeSelected: (BondType?) -> Unit
 ) {
-    Row {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        // "All" filter chip
         FilterChip(
             selected = selectedType == null,
             onClick = { onTypeSelected(null) },
             label = { Text("All") },
-            modifier = Modifier.padding(end = 4.dp)
+            modifier = Modifier
         )
         
-        BondType.values().forEach { type ->
+        // Filter chips for each bond type
+        BondType.values().forEach { bondType ->
             FilterChip(
-                selected = selectedType == type,
-                onClick = { onTypeSelected(type) },
-                label = { Text(type.name.lowercase().capitalize()) },
-                modifier = Modifier.padding(horizontal = 4.dp)
+                selected = selectedType == bondType,
+                onClick = { onTypeSelected(bondType) },
+                label = { 
+                    Text(
+                        text = bondType.name.lowercase().capitalize(),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    ) 
+                },
+                modifier = Modifier.widthIn(min = 90.dp)
             )
         }
     }
 }
 
 @Composable
-private fun SummaryItem(
+fun SummaryItem(
     label: String,
     value: String,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+    ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
             text = value,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold
         )
     }
 }
 
 @Composable
-private fun BondListItem(
+fun BondListItem(
     bond: Bond,
     onBondClick: () -> Unit
 ) {
-    Surface(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onBondClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        color = Color.Transparent
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable(onClick = onBondClick),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        shape = RoundedCornerShape(8.dp)
     ) {
-        Column {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(
+                text = bond.name ?: bond.issuerName,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            
+            Spacer(modifier = Modifier.height(4.dp))
+            
+            Text(
+                text = bond.issuerName,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.weight(1f)) {
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
                     Text(
-                        text = bond.name ?: bond.issuerName,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    
-                    Text(
-                        text = "${String.format("%.2f", bond.couponRate)}% | ${bond.bondType.name.lowercase().capitalize()}",
-                        style = MaterialTheme.typography.bodyMedium,
+                        text = "Face Value",
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = formatCurrency(bond.faceValuePerBond * bond.quantityPurchased),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium
                     )
                 }
                 
                 Column(
-                    horizontalAlignment = Alignment.End
+                    modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = formatCurrency(bond.faceValuePerBond * bond.quantityPurchased),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium
-                    )
-                    
-                    Text(
-                        text = "Matures: ${formatDate(bond.maturityDate)}",
+                        text = "Coupon",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "${String.format("%.2f", bond.couponRate)}%",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+                
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = "Maturity",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = formatDate(bond.maturityDate),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium
                     )
                 }
             }
@@ -355,5 +473,13 @@ private fun formatDate(date: kotlinx.datetime.LocalDate): String {
 private fun String.capitalize(): String {
     return this.replaceFirstChar { 
         if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() 
+    }
+}
+
+private fun getYieldTypeDisplayName(yieldType: YieldType): String {
+    return when (yieldType) {
+        YieldType.COUPON_RATE -> "Coupon Rate"
+        YieldType.CURRENT_YIELD -> "Current Yield"
+        YieldType.YIELD_TO_MATURITY -> "Yield to Maturity"
     }
 }

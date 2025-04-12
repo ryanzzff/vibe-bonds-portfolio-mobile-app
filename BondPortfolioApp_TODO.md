@@ -92,10 +92,10 @@ This list outlines the steps to build the Bond Portfolio Tracker app using Kotli
 
 ## Phase 4: Android UI - Portfolio Overview & Interest Tracking
 
-*   [ ] 1. **Portfolio List Screen Enhancements:**
-    *   [ ] Integrate `CalculateAverageYieldUseCase` into `PortfolioListViewModel`.
-    *   [ ] Add UI elements (e.g., Cards) to display Total Portfolio Value (Initial Cost) and Average Yield (with selection dropdown - FR2.3).
-    *   [ ] Implement Filter UI (e.g., Chips, Dropdown) for Bond Type (FR4.1). Update ViewModel and UseCase calls to support filtering.
+*   [x] 1. **Portfolio List Screen Enhancements:**
+    *   [x] Integrate `CalculateAverageYieldUseCase` into `PortfolioListViewModel`.
+    *   [x] Add UI elements (e.g., Cards) to display Total Portfolio Value (Initial Cost) and Average Yield (with selection dropdown - FR2.3).
+    *   [x] Implement Filter UI (e.g., Chips, Dropdown) for Bond Type (FR4.1). Update ViewModel and UseCase calls to support filtering.
 *   [ ] 2. **Interest Schedule Screen:**
     *   [ ] Create `InterestScheduleViewModel`. Inject summary/schedule UseCases.
     *   [ ] Create `InterestScheduleScreen` Composable.

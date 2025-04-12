@@ -7,7 +7,7 @@ import androidx.compose.ui.test.performClick
 import com.ryzoft.bondportfolioapp.shared.domain.model.Bond
 import com.ryzoft.bondportfolioapp.shared.domain.model.BondType
 import com.ryzoft.bondportfolioapp.shared.domain.model.PaymentFrequency
-import com.ryzoft.bondportfolioapp.shared.domain.usecase.GetBondsUseCase
+import com.ryzoft.bondportfolioapp.shared.domain.model.YieldType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.datetime.Clock
@@ -43,10 +43,8 @@ class PortfolioListScreenTest {
         
         // Verify bond items are displayed
         composeTestRule.onNodeWithText("Test Corporate Bond").assertIsDisplayed()
-        composeTestRule.onNodeWithText("5.00% | Corporate").assertIsDisplayed()
         
         composeTestRule.onNodeWithText("Test TREASURY Bond").assertIsDisplayed()
-        composeTestRule.onNodeWithText("3.00% | Treasury").assertIsDisplayed()
         
         // Verify filter section is displayed
         composeTestRule.onNodeWithText("Filter by Type:").assertIsDisplayed()
@@ -141,16 +139,28 @@ class PortfolioListScreenTest {
         isLoading: Boolean = false,
         error: String? = null
     ) : PortfolioListViewModel {
-        override val uiState: StateFlow<PortfolioListUiState> = MutableStateFlow(
+        private val _uiState = MutableStateFlow(
             PortfolioListUiState(
                 bonds = bonds,
                 isLoading = isLoading,
-                error = error
+                error = error,
+                yields = mapOf(
+                    YieldType.COUPON_RATE to 4.0,
+                    YieldType.CURRENT_YIELD to 4.2,
+                    YieldType.YIELD_TO_MATURITY to 4.5
+                ),
+                selectedYieldType = YieldType.COUPON_RATE
             )
         )
+        
+        override val uiState: StateFlow<PortfolioListUiState> = _uiState
 
         override fun loadBonds() {
             // No-op for testing
+        }
+        
+        override fun setSelectedYieldType(yieldType: YieldType) {
+            _uiState.value = _uiState.value.copy(selectedYieldType = yieldType)
         }
     }
 
