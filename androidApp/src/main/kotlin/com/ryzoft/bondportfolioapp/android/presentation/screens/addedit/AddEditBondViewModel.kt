@@ -259,7 +259,7 @@ data class AddEditBondUiState(
     val issuer: String = "",
     val isin: String = "",
     val bondType: BondType = BondType.CORPORATE,
-    val faceValuePerBond: String = "",
+    val faceValuePerBond: String = "1000", // Set default face value to 1000
     val quantityPurchased: String = "",
     val purchasePrice: String = "",
     val couponRate: String = "",
