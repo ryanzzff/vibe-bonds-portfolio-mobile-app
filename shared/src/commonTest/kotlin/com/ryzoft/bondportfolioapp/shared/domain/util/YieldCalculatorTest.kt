@@ -23,7 +23,7 @@ class YieldCalculatorTest {
         id = 1L,
         bondType = BondType.CORPORATE,
         issuerName = "Par Corp",
-        couponRate = 5.0, // 5% annual
+        couponRate = 0.05, // 5% annual (decimal)
         maturityDate = today.plus(5, DateTimeUnit.YEAR),
         faceValuePerBond = 1000.0,
         purchaseDate = today.minus(30, DateTimeUnit.DAY),
@@ -37,7 +37,7 @@ class YieldCalculatorTest {
         id = 2L,
         bondType = BondType.TREASURY,
         issuerName = "Discount Treasury",
-        couponRate = 3.0, // 3% annual
+        couponRate = 0.03, // 3% annual (decimal)
         maturityDate = today.plus(10, DateTimeUnit.YEAR),
         faceValuePerBond = 1000.0,
         purchaseDate = today.minus(60, DateTimeUnit.DAY),
@@ -51,7 +51,7 @@ class YieldCalculatorTest {
         id = 3L,
         bondType = BondType.MUNICIPAL,
         issuerName = "Premium Muni",
-        couponRate = 4.0, // 4% annual
+        couponRate = 0.04, // 4% annual (decimal)
         maturityDate = today.plus(3, DateTimeUnit.YEAR),
         faceValuePerBond = 5000.0,
         purchaseDate = today.minus(90, DateTimeUnit.DAY),
@@ -79,16 +79,16 @@ class YieldCalculatorTest {
         val bonds = listOf(parBond, discountBond, premiumBond)
         
         // Expected:
-        // parBond: 5% * 10 * 1000 = 50,000
-        // discountBond: 3% * 5 * 1000 = 15,000
-        // premiumBond: 4% * 2 * 5000 = 40,000
+        // parBond: 0.05 * 10 * 1000 = 500
+        // discountBond: 0.03 * 5 * 1000 = 150
+        // premiumBond: 0.04 * 2 * 5000 = 400
         // Total weight: 10*1000 + 5*1000 + 2*5000 = 25,000
-        // Weighted avg: (50,000 + 15,000 + 40,000) / 25,000 = 4.2%
+        // Weighted avg: (500 + 150 + 400) / 25,000 = 0.042
         
-        val expectedAvg = 4.2
+        val expectedAvg = 0.042
         val actualAvg = YieldCalculator.calculateAverageCouponRate(bonds)
         
-        assertEquals(expectedAvg, actualAvg, 0.01)
+        assertEquals(expectedAvg, actualAvg, 0.0001)
     }
     
     @Test
@@ -107,9 +107,9 @@ class YieldCalculatorTest {
         val currentYield = YieldCalculator.calculateCurrentYield(discountBond)
         assertTrue(currentYield > discountBond.couponRate)
         
-        val expectedYield = (discountBond.faceValuePerBond * (discountBond.couponRate / 100.0) / discountBond.purchasePrice) * 100.0
-        // For a discount bond with 3% coupon and 900 price: (1000 * 0.03 / 900) * 100 = 3.33%
-        assertEquals(expectedYield, currentYield, 0.01)
+        val expectedYield = discountBond.faceValuePerBond * discountBond.couponRate / discountBond.purchasePrice
+        // For a discount bond with 0.03 coupon and 900 price: 1000 * 0.03 / 900 = 0.0333
+        assertEquals(expectedYield, currentYield, 0.0001)
     }
     
     @Test
@@ -117,9 +117,9 @@ class YieldCalculatorTest {
         val currentYield = YieldCalculator.calculateCurrentYield(premiumBond)
         assertTrue(currentYield < premiumBond.couponRate)
         
-        val expectedYield = (premiumBond.faceValuePerBond * (premiumBond.couponRate / 100.0) / premiumBond.purchasePrice) * 100.0
-        // For a premium bond with 4% coupon and 5200 price: (5000 * 0.04 / 5200) * 100 = 3.85%
-        assertEquals(expectedYield, currentYield, 0.01)
+        val expectedYield = premiumBond.faceValuePerBond * premiumBond.couponRate / premiumBond.purchasePrice
+        // For a premium bond with 0.04 coupon and 5200 price: 5000 * 0.04 / 5200 = 0.0385
+        assertEquals(expectedYield, currentYield, 0.0001)
     }
     
     @Test
@@ -145,7 +145,7 @@ class YieldCalculatorTest {
     @Test
     fun `calculateYTM for bond at par approximates coupon rate`() {
         val ytm = YieldCalculator.calculateYTM(parBond)
-        assertEquals(parBond.couponRate, ytm, 0.25) // Approximately equal
+        assertEquals(parBond.couponRate, ytm, 0.0025) // Approximately equal (within 0.25%)
     }
     
     @Test
@@ -166,10 +166,10 @@ class YieldCalculatorTest {
         
         // Expected YTM for zero coupon bond:
         // YTM = (FV/Price)^(1/years) - 1
-        // With FV=10000, Price=5000, years=15: (10000/5000)^(1/15) - 1 = 0.0472 = 4.72%
-        val expectedYTM = ((zeroCouponBond.faceValuePerBond / zeroCouponBond.purchasePrice).pow(1.0 / 15.0) - 1.0) * 100.0
+        // With FV=10000, Price=5000, years=15: (10000/5000)^(1/15) - 1 = 0.0472
+        val expectedYTM = (zeroCouponBond.faceValuePerBond / zeroCouponBond.purchasePrice).pow(1.0 / 15.0) - 1.0
         
-        assertEquals(expectedYTM, ytm, 0.1) // Within 0.1 percentage point
+        assertEquals(expectedYTM, ytm, 0.001) // Within 0.001 decimal precision
     }
     
     @Test

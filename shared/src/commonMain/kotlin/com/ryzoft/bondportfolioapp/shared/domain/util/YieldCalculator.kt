@@ -71,10 +71,10 @@ object YieldCalculator {
         if (bond.purchasePrice <= 0) return 0.0
 
         // Annual interest = face value * coupon rate
-        val annualInterest = bond.faceValuePerBond * (bond.couponRate / 100.0)
+        val annualInterest = bond.faceValuePerBond * bond.couponRate
         
         // Current yield = annual interest / purchase price
-        return (annualInterest / bond.purchasePrice) * 100.0
+        return (annualInterest / bond.purchasePrice)
     }
 
     /**
@@ -123,11 +123,11 @@ object YieldCalculator {
         if (bond.couponRate == 0.0) {
             // YTM = (FV/PV)^(1/n) - 1 where n is years to maturity
             val ytm = (bond.faceValuePerBond / bond.purchasePrice).pow(1.0 / yearsToMaturity) - 1.0
-            return ytm * 100.0
+            return ytm // YTM already as decimal, consistent with other methods
         }
         
         // For coupon-paying bonds, use an iterative approach (bisection method)
-        return bisectionYTM(bond, yearsToMaturity) * 100.0
+        return bisectionYTM(bond, yearsToMaturity) // Returned as decimal, consistent with other methods
     }
     
     /**
@@ -153,7 +153,7 @@ object YieldCalculator {
         // Bond parameters
         val faceValue = bond.faceValuePerBond
         val purchasePrice = bond.purchasePrice
-        val couponRate = bond.couponRate / 100.0 // Convert to decimal
+        val couponRate = bond.couponRate // Already in decimal form
         val couponPayment = faceValue * couponRate
         
         // Payments per year - simplification: use 1 for annual, 2 for semi-annual

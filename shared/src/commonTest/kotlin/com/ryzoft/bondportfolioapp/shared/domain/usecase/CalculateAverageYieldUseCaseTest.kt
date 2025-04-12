@@ -30,7 +30,7 @@ class CalculateAverageYieldUseCaseTest {
         id = 1L,
         bondType = BondType.CORPORATE,
         issuerName = "Test Corp",
-        couponRate = 5.0,
+        couponRate = 0.05,  // 5% annual (decimal)
         maturityDate = today.plus(5, DateTimeUnit.YEAR),
         faceValuePerBond = 1000.0,
         purchaseDate = today.minus(30, DateTimeUnit.DAY),
@@ -43,7 +43,7 @@ class CalculateAverageYieldUseCaseTest {
         id = 2L,
         bondType = BondType.TREASURY,
         issuerName = "Test Treasury",
-        couponRate = 3.0,
+        couponRate = 0.03,  // 3% annual (decimal)
         maturityDate = today.plus(10, DateTimeUnit.YEAR),
         faceValuePerBond = 1000.0,
         purchaseDate = today.minus(60, DateTimeUnit.DAY),
@@ -71,7 +71,7 @@ class CalculateAverageYieldUseCaseTest {
         val result = useCase(YieldType.COUPON_RATE).first()
         val expected = YieldCalculator.calculateAverageCouponRate(listOf(bond1, bond2))
         
-        assertEquals(expected, result, 0.01)
+        assertEquals(expected, result, 0.0001)
     }
     
     @Test
@@ -81,7 +81,7 @@ class CalculateAverageYieldUseCaseTest {
         val result = useCase(YieldType.CURRENT_YIELD).first()
         val expected = YieldCalculator.calculateAverageCurrentYield(listOf(bond1, bond2))
         
-        assertEquals(expected, result, 0.01)
+        assertEquals(expected, result, 0.0001)
     }
     
     @Test
@@ -91,7 +91,7 @@ class CalculateAverageYieldUseCaseTest {
         val result = useCase(YieldType.YIELD_TO_MATURITY).first()
         val expected = YieldCalculator.calculateAverageYTM(listOf(bond1, bond2))
         
-        assertEquals(expected, result, 0.01)
+        assertEquals(expected, result, 0.0001)
     }
     
     @Test
@@ -111,7 +111,7 @@ class CalculateAverageYieldUseCaseTest {
             val expectedValue = useCase(yieldType).first()
             val actualValue = results[yieldType]
             assertNotNull(actualValue, "Value for $yieldType should not be null")
-            assertEquals(expectedValue, actualValue, 0.01)
+            assertEquals(expectedValue, actualValue, 0.0001)
         }
     }
     
