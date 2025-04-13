@@ -228,7 +228,6 @@ class AddEditBondScreenTest {
         fun setValidationErrors(hasErrors: Boolean) {
             _uiState.value = _uiState.value.copy(
                 nameError = hasErrors,
-                issuerError = hasErrors,
                 faceValueError = hasErrors,
                 quantityError = hasErrors,
                 purchasePriceError = hasErrors,
@@ -245,7 +244,7 @@ class AddEditBondScreenTest {
         }
 
         override fun updateIssuer(issuer: String) {
-            _uiState.value = _uiState.value.copy(issuer = issuer, issuerError = false)
+            _uiState.value = _uiState.value.copy(issuer = issuer)
         }
 
         override fun updateIsin(isin: String) {
@@ -289,7 +288,7 @@ class AddEditBondScreenTest {
         }
 
         override fun validateForm(): Boolean {
-            return !(_uiState.value.nameError || _uiState.value.issuerError || 
+            return !(_uiState.value.nameError || 
                     _uiState.value.faceValueError || _uiState.value.quantityError || 
                     _uiState.value.purchasePriceError || _uiState.value.couponRateError)
         }
