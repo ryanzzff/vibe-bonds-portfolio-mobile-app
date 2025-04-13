@@ -9,7 +9,7 @@ data class Bond(
     val id: Long, // Unique identifier from the database
     val bondType: BondType,
     val issuerName: String = "", // Now optional with a default empty string
-    val couponRate: Double, // Annual coupon rate as a percentage (e.g., 2.5 for 2.5%)
+    val couponRate: Double, // Annual coupon rate as a decimal (e.g., 0.05 for 5%)
     val maturityDate: LocalDate,
     val faceValuePerBond: Double, // Face value of a single bond (e.g., 1000.0)
     val purchaseDate: LocalDate,

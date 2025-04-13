@@ -78,14 +78,14 @@ class YieldCalculatorTest {
     fun `calculateAverageCouponRate returns weighted average`() {
         val bonds = listOf(parBond, discountBond, premiumBond)
         
-        // Expected:
+        // Expected weighted average calculation:
         // parBond: 0.05 * 10 * 1000 = 500
         // discountBond: 0.03 * 5 * 1000 = 150
         // premiumBond: 0.04 * 2 * 5000 = 400
-        // Total weight: 10*1000 + 5*1000 + 2*5000 = 25,000
-        // Weighted avg: (500 + 150 + 400) / 25,000 = 0.042
+        // Total face value: 10*1000 + 5*1000 + 2*5000 = 25000
+        // Weighted avg: (500 + 150 + 400) / 25000 = 0.042
         
-        val expectedAvg = 0.042
+        val expectedAvg = 0.042 // Expect decimal average
         val actualAvg = YieldCalculator.calculateAverageCouponRate(bonds)
         
         assertEquals(expectedAvg, actualAvg, 0.0001)
@@ -99,7 +99,8 @@ class YieldCalculatorTest {
     @Test
     fun `calculateCurrentYield for par bond is same as coupon rate`() {
         val currentYield = YieldCalculator.calculateCurrentYield(parBond)
-        assertEquals(parBond.couponRate, currentYield, 0.01)
+        // At par, current yield equals coupon rate
+        assertEquals(parBond.couponRate, currentYield, 0.0001)
     }
     
     @Test
@@ -107,8 +108,10 @@ class YieldCalculatorTest {
         val currentYield = YieldCalculator.calculateCurrentYield(discountBond)
         assertTrue(currentYield > discountBond.couponRate)
         
-        val expectedYield = discountBond.faceValuePerBond * discountBond.couponRate / discountBond.purchasePrice
-        // For a discount bond with 0.03 coupon and 900 price: 1000 * 0.03 / 900 = 0.0333
+        // For a discount bond with 0.03 coupon and purchase price 900:
+        // Annual interest = 1000 * 0.03 = 30
+        // Expected yield = 30 / 900 = 0.0333...
+        val expectedYield = (discountBond.faceValuePerBond * discountBond.couponRate) / discountBond.purchasePrice
         assertEquals(expectedYield, currentYield, 0.0001)
     }
     
@@ -117,8 +120,10 @@ class YieldCalculatorTest {
         val currentYield = YieldCalculator.calculateCurrentYield(premiumBond)
         assertTrue(currentYield < premiumBond.couponRate)
         
-        val expectedYield = premiumBond.faceValuePerBond * premiumBond.couponRate / premiumBond.purchasePrice
-        // For a premium bond with 0.04 coupon and 5200 price: 5000 * 0.04 / 5200 = 0.0385
+        // For a premium bond with 0.04 coupon and purchase price 5200:
+        // Annual interest = 5000 * 0.04 = 200
+        // Expected yield = 200 / 5200 = 0.03846...
+        val expectedYield = (premiumBond.faceValuePerBond * premiumBond.couponRate) / premiumBond.purchasePrice
         assertEquals(expectedYield, currentYield, 0.0001)
     }
     

@@ -207,7 +207,13 @@ private fun BondDetailsContent(bond: Bond) {
                 
                 // Current Yield
                 val currentYield = if (bond.purchasePrice > 0) {
-                    (bond.couponRate * bond.faceValuePerBond) / bond.purchasePrice
+                    // For a bond with face value $1000, coupon 0.05 (5%), and purchase price 97.10 (97.10% of face value):
+                    // Annual interest = $1000 * 0.05 = $50
+                    // Actual price paid = 97.10 * $1000 / 100 = $971.00
+                    // Current yield = $50 / $971.00 = 0.0515 (5.15%)
+                    val annualInterest = bond.faceValuePerBond * bond.couponRate
+                    val actualPricePaid = bond.purchasePrice * bond.faceValuePerBond / 100
+                    annualInterest / actualPricePaid
                 } else {
                     0.0
                 }
