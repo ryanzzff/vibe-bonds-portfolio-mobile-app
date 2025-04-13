@@ -86,6 +86,12 @@ This document outlines the requirements for the Vibe Bond Portfolio Tracker mobi
 
 *   **FR6.1:** The application will initially only support USD. Currency field should exist but be fixed/non-editable.
 
+### 4.7. Charts and Visualizations
+
+*   **FR7.1:** Implement a "Portfolio Value Over Time" line chart to display the historical value of the user's portfolio. Allow users to select different time ranges (e.g., 1 month, 6 months, 1 year, all time).
+*   **FR7.2:** Add a bar chart to project "Upcoming Income/Coupon Payments" over the next few months or quarters, providing a clear view of expected cash flows.
+*   **FR7.3:** Include a "Maturity Distribution" bar chart to show the amount of principal maturing in different time buckets (e.g., <1 year, 1-3 years, 3-5 years, >5 years).
+
 ## 5. Non-Functional Requirements
 
 *   **NFR1:** **Platform:** Android (Initial), iOS (Future).

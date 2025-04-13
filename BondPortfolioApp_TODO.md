@@ -125,3 +125,23 @@ This list outlines the steps to build the Bond Portfolio Tracker app using Kotli
 *   [ ] 3. Cloud Sync/Backup.
 *   [ ] 4. Notifications.
 *   [ ] 5. Charts/Visualizations.
+
+## Phase 7: Charts and Visualizations
+
+*   [ ] 1. **Portfolio Value Over Time Chart:**
+    *   [ ] Create a `PortfolioValueChartViewModel` to fetch and process historical portfolio value data.
+    *   [ ] Implement a `PortfolioValueChartScreen` Composable using a charting library (e.g., MPAndroidChart or Compose Charts).
+    *   [ ] Allow users to select time ranges (e.g., 1 month, 6 months, 1 year, all time).
+    *   [ ] Add navigation to this screen from the Portfolio Overview.
+
+*   [ ] 2. **Upcoming Income/Coupon Payments Chart:**
+    *   [ ] Create a `IncomeProjectionChartViewModel` to fetch and process upcoming income data.
+    *   [ ] Implement a `IncomeProjectionChartScreen` Composable using a bar chart.
+    *   [ ] Display projected income for the next few months or quarters.
+    *   [ ] Add navigation to this screen from the Interest Schedule.
+
+*   [ ] 3. **Maturity Distribution Chart:**
+    *   [ ] Create a `MaturityDistributionChartViewModel` to fetch and process bond maturity data.
+    *   [ ] Implement a `MaturityDistributionChartScreen` Composable using a bar chart.
+    *   [ ] Group bonds into time buckets (e.g., <1 year, 1-3 years, 3-5 years, >5 years).
+    *   [ ] Add navigation to this screen from the Portfolio Overview.
