@@ -1,5 +1,7 @@
 # Vibe Bonds Portfolio App
 
+![Vibe Bonds Portfolio App Feature Graphic](assets/feature_graphic.png)
+
 ## Overview
 The Vibe Bonds Portfolio App is a mobile application designed to help users manage their bond investments efficiently. This app aims to provide tools for tracking bond portfolios and making informed investment decisions.
 
@@ -29,4 +31,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Contact
-For support or queries, reach out to us at support@vibebonds.com.
+For support or queries, reach out to us at admin@ryzoft.com.
