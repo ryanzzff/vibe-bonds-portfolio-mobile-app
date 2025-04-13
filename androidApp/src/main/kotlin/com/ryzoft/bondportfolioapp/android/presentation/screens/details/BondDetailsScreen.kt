@@ -39,6 +39,7 @@ import com.ryzoft.bondportfolioapp.android.di.UseCaseProvider
 import com.ryzoft.bondportfolioapp.shared.domain.model.Bond
 import com.ryzoft.bondportfolioapp.shared.domain.model.BondType
 import com.ryzoft.bondportfolioapp.shared.domain.model.PaymentFrequency
+import com.ryzoft.bondportfolioapp.shared.domain.util.YieldCalculator
 import java.text.NumberFormat
 import java.util.Locale
 import kotlinx.datetime.toJavaLocalDate
@@ -184,39 +185,22 @@ private fun BondDetailsContent(bond: Bond) {
                 // Financial Details
                 DetailItem(label = "Face Value Per Bond", value = formatCurrency(bond.faceValuePerBond))
                 DetailItem(label = "Quantity", value = bond.quantityPurchased.toString())
-                DetailItem(label = "Total Face Value", value = formatCurrency(bond.faceValuePerBond * bond.quantityPurchased))
+                DetailItem(label = "Total Face Value", value = formatCurrency(YieldCalculator.calculateTotalFaceValue(bond)))
                 DetailItem(label = "Purchase Price", value = formatCurrency(bond.purchasePrice))
-                DetailItem(label = "Total Investment", value = formatCurrency(bond.purchasePrice / 100 * bond.faceValuePerBond * bond.quantityPurchased))
+                DetailItem(label = "Total Investment", value = formatCurrency(YieldCalculator.calculateTotalInvestment(bond)))
                 DetailItem(label = "Coupon Rate", value = formatPercentage(bond.couponRate))
                 DetailItem(label = "Payment Frequency", value = getPaymentFrequencyDisplayName(bond.paymentFrequency))
 
-                // Next Interest Payment Amount
-                val paymentPerPeriod = bond.faceValuePerBond * bond.couponRate / when (bond.paymentFrequency) {
-                    PaymentFrequency.SEMI_ANNUAL -> 2.0
-                    PaymentFrequency.QUARTERLY -> 4.0
-                    PaymentFrequency.ANNUAL -> 1.0
-                    // Assuming ANNUAL if frequency is somehow null or unknown - adjust if needed
-                    else -> 1.0 
-                }
-                val nextInterestPayment = paymentPerPeriod * bond.quantityPurchased
+                // Next Interest Payment Amount - Use domain layer calculator
+                val nextInterestPayment = YieldCalculator.calculateNextInterestPayment(bond)
                 DetailItem(label = "Next Interest Payment", value = formatCurrency(nextInterestPayment))
                 
                 // Dates
                 DetailItem(label = "Purchase Date", value = formatDate(bond.purchaseDate))
                 DetailItem(label = "Maturity Date", value = formatDate(bond.maturityDate))
                 
-                // Current Yield
-                val currentYield = if (bond.purchasePrice > 0) {
-                    // For a bond with face value $1000, coupon 0.05 (5%), and purchase price 97.10 (97.10% of face value):
-                    // Annual interest = $1000 * 0.05 = $50
-                    // Actual price paid = 97.10 * $1000 / 100 = $971.00
-                    // Current yield = $50 / $971.00 = 0.0515 (5.15%)
-                    val annualInterest = bond.faceValuePerBond * bond.couponRate
-                    val actualPricePaid = bond.purchasePrice * bond.faceValuePerBond / 100
-                    annualInterest / actualPricePaid
-                } else {
-                    0.0
-                }
+                // Current Yield - Use domain layer calculator instead of UI-layer calculation
+                val currentYield = YieldCalculator.calculateCurrentYield(bond)
                 DetailItem(label = "Current Yield", value = formatPercentage(currentYield))
                 
                 // Notes (if any)
