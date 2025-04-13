@@ -22,7 +22,7 @@ class GetAllFutureInterestPaymentsUseCaseTest {
         id = 1L,
         bondType = BondType.CORPORATE,
         issuerName = "XYZ Corp",
-        couponRate = 4.5, // 4.5% annual coupon
+        couponRate = 0.045, // 4.5% annual coupon as decimal (0.045)
         maturityDate = today.plus(3, DateTimeUnit.YEAR), // 3 years from today
         faceValuePerBond = 1000.0,
         purchaseDate = today.minus(3, DateTimeUnit.MONTH), // Purchased 3 months ago
@@ -85,4 +85,4 @@ class GetAllFutureInterestPaymentsUseCaseTest {
             assertTrue(payments[i].paymentDate < payments[i + 1].paymentDate)
         }
     }
-} 
+}
