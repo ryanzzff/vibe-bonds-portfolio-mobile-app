@@ -96,10 +96,6 @@ dependencies {
     // Calendar library for Interest Calendar Screen
     implementation("com.kizitonwose.calendar:compose:2.5.1")
     
-    // Charts library for Portfolio Value and other visualizations
-    implementation("com.patrykandpatrick.vico:compose:1.13.1")
-    implementation("com.patrykandpatrick.vico:compose-m3:1.13.1")
-    
     // Desugaring support for java.time API
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 

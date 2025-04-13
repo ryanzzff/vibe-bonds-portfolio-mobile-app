@@ -128,11 +128,11 @@ This list outlines the steps to build the Bond Portfolio Tracker app using Kotli
 
 ## Phase 7: Charts and Visualizations
 
-*   [x] 1. **Portfolio Value Over Time Chart:**
-    *   [x] Create a `PortfolioValueChartViewModel` to fetch and process historical portfolio value data.
-    *   [x] Implement a `PortfolioValueChartScreen` Composable using a charting library (e.g., MPAndroidChart or Compose Charts).
-    *   [x] Allow users to select time ranges (e.g., 1 month, 6 months, 1 year, all time).
-    *   [x] Add navigation to this screen from the Portfolio Overview.
+*   [ ] 1. **Portfolio Value Over Time Chart:**
+    *   [ ] Create a `PortfolioValueChartViewModel` to fetch and process historical portfolio value data.
+    *   [ ] Implement a `PortfolioValueChartScreen` Composable using a charting library (e.g., MPAndroidChart or Compose Charts).
+    *   [ ] Allow users to select time ranges (e.g., 1 month, 6 months, 1 year, all time).
+    *   [ ] Add navigation to this screen from the Portfolio Overview.
 
 *   [ ] 2. **Upcoming Income/Coupon Payments Chart:**
     *   [ ] Create a `IncomeProjectionChartViewModel` to fetch and process upcoming income data.

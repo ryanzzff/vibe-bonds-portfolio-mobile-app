@@ -7,7 +7,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.ryzoft.bondportfolioapp.android.presentation.screens.addedit.AddEditBondScreen
-import com.ryzoft.bondportfolioapp.android.presentation.screens.charts.PortfolioValueChartScreen
 import com.ryzoft.bondportfolioapp.android.presentation.screens.details.BondDetailsScreen
 import com.ryzoft.bondportfolioapp.android.presentation.screens.interest.InterestCalendarScreen
 import com.ryzoft.bondportfolioapp.android.presentation.screens.interest.InterestScheduleScreen
@@ -23,7 +22,6 @@ object Routes {
     const val EDIT_BOND = "edit_bond"
     const val INTEREST_SCHEDULE = "interest_schedule"
     const val INTEREST_CALENDAR = "interest_calendar"
-    const val PORTFOLIO_VALUE_CHART = "portfolio_value_chart"
     
     // Routes with arguments
     fun bondDetailsRoute(bondId: Long): String = "$BOND_DETAILS/$bondId"
@@ -50,9 +48,6 @@ fun AppNavHost(navController: NavHostController) {
                 },
                 onInterestScheduleClick = {
                     navController.navigate(Routes.INTEREST_SCHEDULE)
-                },
-                onPortfolioValueChartClick = {
-                    navController.navigate(Routes.PORTFOLIO_VALUE_CHART)
                 }
             )
         }
@@ -128,15 +123,6 @@ fun AppNavHost(navController: NavHostController) {
         // Interest Calendar screen - view interest payments on calendar
         composable(Routes.INTEREST_CALENDAR) {
             InterestCalendarScreen(
-                onBackClick = {
-                    navController.popBackStack()
-                }
-            )
-        }
-        
-        // Portfolio Value Chart screen - view portfolio value over time
-        composable(Routes.PORTFOLIO_VALUE_CHART) {
-            PortfolioValueChartScreen(
                 onBackClick = {
                     navController.popBackStack()
                 }
