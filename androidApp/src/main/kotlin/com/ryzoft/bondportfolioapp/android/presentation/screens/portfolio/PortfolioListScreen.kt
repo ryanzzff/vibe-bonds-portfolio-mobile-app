@@ -20,6 +20,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.automirrored.filled.ShowChart
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -67,6 +69,7 @@ fun PortfolioListScreen(
     onBondClick: (bondId: Long) -> Unit,
     onAddBondClick: () -> Unit,
     onInterestScheduleClick: () -> Unit = {},
+    onPortfolioValueChartClick: () -> Unit = {},
     viewModel: PortfolioListViewModel = createViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -97,6 +100,15 @@ fun PortfolioListScreen(
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 actions = {
+                    IconButton(
+                        onClick = onPortfolioValueChartClick
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ShowChart,
+                            contentDescription = "Portfolio Value Chart",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
                     IconButton(
                         onClick = onInterestScheduleClick
                     ) {
@@ -141,11 +153,30 @@ fun PortfolioListScreen(
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
-                    Text(
-                        text = "Portfolio Summary",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Portfolio Summary",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.weight(1f)
+                        )
+                        
+                        Button(
+                            onClick = onPortfolioValueChartClick,
+                            modifier = Modifier.padding(start = 8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ShowChart,
+                                contentDescription = null,
+                                modifier = Modifier.padding(end = 4.dp)
+                            )
+                            Text("View Chart")
+                        }
+                    }
+                    
                     Spacer(modifier = Modifier.height(8.dp))
                     
                     Row(
