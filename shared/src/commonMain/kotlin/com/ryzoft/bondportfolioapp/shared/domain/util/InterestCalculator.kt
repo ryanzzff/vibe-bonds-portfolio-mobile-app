@@ -6,6 +6,7 @@ import com.ryzoft.bondportfolioapp.shared.domain.model.PaymentFrequency
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
@@ -49,8 +50,8 @@ object InterestCalculator {
     }
     
     /**
-     * Calculates payment dates from purchase date (or today if purchase date is in the past)
-     * until maturity date.
+     * Calculates payment dates from reference date until maturity date.
+     * Payment schedule is based on standard market payment cycles, not purchase date.
      *
      * @param bond The bond
      * @param referenceDate The reference date (typically today's date)
@@ -74,12 +75,8 @@ object InterestCalculator {
         // Determine the increment in months between payments
         val monthsPerPayment = 12 / paymentsPerYear
         
-        // Start from the later of purchase date or reference date (today)
-        val startDate = if (bond.purchaseDate > referenceDate) bond.purchaseDate else referenceDate
-        
-        // Find the first payment date after start date
-        // First find where in the payment cycle we are
-        var firstPaymentDate = findNextPaymentDate(bond, startDate, monthsPerPayment)
+        // Find the first payment date after reference date
+        var firstPaymentDate = findNextPaymentDate(bond.maturityDate, referenceDate, monthsPerPayment)
         
         // Generate all payment dates until maturity
         val paymentDates = mutableListOf<LocalDate>()
@@ -95,38 +92,47 @@ object InterestCalculator {
     
     /**
      * Finds the next payment date after the reference date.
+     * Uses standard bond market payment cycles, independent of purchase date.
      *
-     * @param bond The bond
+     * @param maturityDate The bond's maturity date
      * @param referenceDate The reference date
      * @param monthsPerPayment Number of months between payments
      * @return The next payment date
      */
-    private fun findNextPaymentDate(bond: Bond, referenceDate: LocalDate, monthsPerPayment: Int): LocalDate {
-        // Start by finding how many months from purchase date to reference date
-        val purchaseYear = bond.purchaseDate.year
-        val purchaseMonth = bond.purchaseDate.monthNumber
+    private fun findNextPaymentDate(maturityDate: LocalDate, referenceDate: LocalDate, monthsPerPayment: Int): LocalDate {
+        // Standard bond market payment cycles are calculated backward from maturity date
+        // For example, if a bond matures on June 15, 2030, and pays semi-annually,
+        // payment dates would be June 15 and December 15 of each year
         
-        val referenceYear = referenceDate.year
-        val referenceMonth = referenceDate.monthNumber
+        val maturityMonth = maturityDate.monthNumber
+        val maturityDay = maturityDate.dayOfMonth
         
-        val monthDiff = (referenceYear - purchaseYear) * 12 + (referenceMonth - purchaseMonth)
+        // Calculate how many months to go backward from the maturity date to find the payment cycle
+        var currentMonth = maturityMonth
+        var currentYear = maturityDate.year
         
-        // How many complete payment periods have passed
-        val completedPaymentPeriods = monthDiff / monthsPerPayment
-        
-        // Calculate next payment date
-        val nextPaymentPeriod = completedPaymentPeriods + 1
-        val monthsToAdd = nextPaymentPeriod * monthsPerPayment
-        
-        // Calculate next payment date from purchase date
-        var nextPaymentDate = bond.purchaseDate.plus(monthsToAdd, DateTimeUnit.MONTH)
-        
-        // If the next payment date is still before the reference date, move one period forward
-        if (nextPaymentDate <= referenceDate) {
-            nextPaymentDate = nextPaymentDate.plus(monthsPerPayment, DateTimeUnit.MONTH)
+        // Find the most recent payment date at or before the reference date
+        while (LocalDate(currentYear, currentMonth, maturityDay) > referenceDate) {
+            currentMonth -= monthsPerPayment
+            while (currentMonth <= 0) {
+                currentMonth += 12
+                currentYear--
+            }
         }
         
-        return nextPaymentDate
+        // Find the next payment date after the reference date
+        var nextPaymentMonth = currentMonth
+        var nextPaymentYear = currentYear
+        
+        do {
+            nextPaymentMonth += monthsPerPayment
+            while (nextPaymentMonth > 12) {
+                nextPaymentMonth -= 12
+                nextPaymentYear++
+            }
+        } while (LocalDate(nextPaymentYear, nextPaymentMonth, maturityDay) <= referenceDate)
+        
+        return LocalDate(nextPaymentYear, nextPaymentMonth, maturityDay)
     }
     
     /**

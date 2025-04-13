@@ -59,6 +59,33 @@ class InterestCalculatorTest {
         quantityPurchased = 2
     )
     
+    // Bonds with identical maturity date but different purchase dates
+    private val earlyPurchaseBond = Bond(
+        id = 4L,
+        bondType = BondType.CORPORATE,
+        issuerName = "Same Maturity Corp",
+        couponRate = 0.04, // 4% annual
+        maturityDate = today.plus(3, DateTimeUnit.YEAR).plus(4, DateTimeUnit.MONTH),
+        faceValuePerBond = 1000.0,
+        purchaseDate = today.minus(1, DateTimeUnit.YEAR), // Purchased a year ago
+        purchasePrice = 950.0,
+        paymentFrequency = PaymentFrequency.SEMI_ANNUAL,
+        quantityPurchased = 3
+    )
+    
+    private val recentPurchaseBond = Bond(
+        id = 5L,
+        bondType = BondType.CORPORATE,
+        issuerName = "Same Maturity Corp",
+        couponRate = 0.04, // 4% annual
+        maturityDate = today.plus(3, DateTimeUnit.YEAR).plus(4, DateTimeUnit.MONTH), // Same maturity as earlyPurchaseBond
+        faceValuePerBond = 1000.0,
+        purchaseDate = today.minus(10, DateTimeUnit.DAY), // Purchased recently
+        purchasePrice = 980.0,
+        paymentFrequency = PaymentFrequency.SEMI_ANNUAL,
+        quantityPurchased = 2
+    )
+    
     @Test
     fun `zero coupon bond should have no payments`() {
         val payments = InterestCalculator.calculateFuturePayments(zeroCouponBond)
@@ -126,4 +153,38 @@ class InterestCalculatorTest {
             assertEquals(6, monthsDiff)
         }
     }
-} 
+    
+    @Test
+    fun `bonds with same maturity but different purchase dates should have identical payment schedules`() {
+        val earlyPurchasePayments = InterestCalculator.calculateFuturePayments(earlyPurchaseBond)
+        val recentPurchasePayments = InterestCalculator.calculateFuturePayments(recentPurchaseBond)
+        
+        // Both should have same number of future payments
+        assertTrue(earlyPurchasePayments.size > 0)
+        assertEquals(earlyPurchasePayments.size, recentPurchasePayments.size)
+        
+        // Payment dates should match, regardless of purchase date
+        for (i in earlyPurchasePayments.indices) {
+            assertEquals(
+                earlyPurchasePayments[i].paymentDate,
+                recentPurchasePayments[i].paymentDate,
+                "Payment dates should be identical regardless of purchase date"
+            )
+        }
+    }
+    
+    @Test
+    fun `payment dates should align with maturity date cycle`() {
+        // For a bond with semi-annual payments, payment dates should be on the same day of month as maturity
+        val maturityDay = semiAnnualBond.maturityDate.dayOfMonth
+        val payments = InterestCalculator.calculateFuturePayments(semiAnnualBond)
+        
+        for (payment in payments) {
+            assertEquals(
+                maturityDay, 
+                payment.paymentDate.dayOfMonth,
+                "Payment day of month should match maturity date day of month"
+            )
+        }
+    }
+}
