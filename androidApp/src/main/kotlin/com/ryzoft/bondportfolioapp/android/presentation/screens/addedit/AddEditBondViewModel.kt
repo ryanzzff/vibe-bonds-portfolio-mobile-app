@@ -114,7 +114,7 @@ class AddEditBondViewModelImpl(
     }
 
     override fun updateIssuer(issuer: String) {
-        _uiState.update { it.copy(issuer = issuer, issuerError = false) }
+        _uiState.update { it.copy(issuer = issuer) }
     }
 
     override fun updateIsin(isin: String) {
@@ -162,6 +162,16 @@ class AddEditBondViewModelImpl(
      * @return True if all required fields are valid, false otherwise
      */
     override fun validateForm(): Boolean {
+        // Reset all validation errors
+        _uiState.update { it.copy(
+            nameError = false,
+            faceValueError = false,
+            quantityError = false,
+            purchasePriceError = false,
+            couponRateError = false,
+            errorMessage = null
+        )}
+        
         var isValid = true
         
         // Validate name
@@ -208,9 +218,14 @@ class AddEditBondViewModelImpl(
      * @param onComplete Callback to execute when saving is complete
      */
     override fun saveBond(onComplete: () -> Unit) {
+        // Show validation errors if form is invalid
         if (!validateForm()) {
+            _uiState.update { it.copy(showValidationErrors = true) }
             return
         }
+        
+        // Set saving state to show loading indicator
+        _uiState.update { it.copy(isSaving = true) }
         
         val state = _uiState.value
         
@@ -238,9 +253,14 @@ class AddEditBondViewModelImpl(
                 } else {
                     addBondUseCase(bond)
                 }
+                _uiState.update { it.copy(isSaving = false) }
                 onComplete()
             } catch (e: Exception) {
-                // Handle error (e.g., show a message)
+                // Handle error by showing error message
+                _uiState.update { it.copy(
+                    isSaving = false,
+                    errorMessage = "Failed to save bond: ${e.localizedMessage ?: "Unknown error"}"
+                )}
             }
         }
     }
@@ -252,7 +272,9 @@ class AddEditBondViewModelImpl(
 data class AddEditBondUiState(
     val isEditMode: Boolean = false,
     val isLoading: Boolean = false,
+    val isSaving: Boolean = false,
     val screenTitle: String = "Add Bond",
+    val showValidationErrors: Boolean = false,
     
     // Form fields
     val name: String = "",
@@ -270,11 +292,12 @@ data class AddEditBondUiState(
     
     // Validation errors
     val nameError: Boolean = false,
-    val issuerError: Boolean = false,
+    // issuerError removed as issuer is now optional
     val faceValueError: Boolean = false,
     val quantityError: Boolean = false,
     val purchasePriceError: Boolean = false,
-    val couponRateError: Boolean = false
+    val couponRateError: Boolean = false,
+    val errorMessage: String? = null
 )
 
 private fun today(): LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date

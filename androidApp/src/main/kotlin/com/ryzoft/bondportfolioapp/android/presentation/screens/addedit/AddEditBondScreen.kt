@@ -107,6 +107,13 @@ fun AddEditBondScreen(
         ) {
             if (uiState.isLoading) {
                 CircularProgressIndicator()
+            } else if (uiState.isSaving) {
+                // Show saving indicator
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    CircularProgressIndicator()
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("Saving bond...")
+                }
             } else {
                 Column(
                     modifier = Modifier
@@ -124,11 +131,11 @@ fun AddEditBondScreen(
                     
                     // Issuer Name
                     FormTextField(
-                        label = "Issuer Name",  // Removed the asterisk to indicate it's optional
+                        label = "Issuer Name (Optional)",  // Explicitly marked as optional
                         value = uiState.issuer,
                         onValueChange = { viewModel.updateIssuer(it) },
-                        isError = uiState.issuerError,
-                        errorMessage = if (uiState.issuerError) "Issuer name is required" else ""
+                        isError = false,  // Never show error since it's optional
+                        errorMessage = ""
                     )
                     
                     // ISIN
@@ -218,6 +225,16 @@ fun AddEditBondScreen(
                     )
                     
                     Spacer(modifier = Modifier.height(16.dp))
+                    
+                    // Error message
+                    uiState.errorMessage?.let { errorMsg ->
+                        Text(
+                            text = errorMsg,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                     
                     // Save Button
                     Button(

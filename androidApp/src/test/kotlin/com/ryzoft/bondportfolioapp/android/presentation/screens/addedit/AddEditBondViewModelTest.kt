@@ -109,7 +109,6 @@ class AddEditBondViewModelTest {
         // Then
         assertFalse(isValid)
         assertEquals(true, viewModel.uiState.value.nameError)
-        assertEquals(false, viewModel.uiState.value.issuerError)
         assertEquals(true, viewModel.uiState.value.faceValueError)
         assertEquals(true, viewModel.uiState.value.quantityError)
         assertEquals(true, viewModel.uiState.value.purchasePriceError)
@@ -140,7 +139,7 @@ class AddEditBondViewModelTest {
         // Then
         assertTrue(isValid)
         assertEquals(false, viewModel.uiState.value.nameError)
-        assertEquals(false, viewModel.uiState.value.issuerError)
+        // issuerError removed as issuer is now optional
         assertEquals(false, viewModel.uiState.value.faceValueError)
         assertEquals(false, viewModel.uiState.value.quantityError)
         assertEquals(false, viewModel.uiState.value.purchasePriceError)
