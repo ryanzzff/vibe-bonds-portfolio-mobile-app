@@ -41,6 +41,7 @@ object InterestCalculator {
         return paymentDates.map { date ->
             InterestPayment(
                 bondId = bond.id,
+                bondName = bond.name ?: bond.issuerName, // Use bond name if available, fallback to issuer name
                 paymentDate = date,
                 amount = paymentAmount
             )
@@ -150,4 +151,4 @@ object InterestCalculator {
         // Round to 2 decimal places to handle floating point imprecision
         return round(amount * 100) / 100
     }
-} 
+}

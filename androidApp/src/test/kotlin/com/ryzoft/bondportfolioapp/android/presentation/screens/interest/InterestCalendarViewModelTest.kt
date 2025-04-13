@@ -45,9 +45,9 @@ class InterestCalendarViewModelTest {
         val testDate3 = LocalDate(2025, 6, 1)
 
         val payments = listOf(
-            InterestPayment(1L, testDate1, 100.0),
-            InterestPayment(2L, testDate2, 200.0),
-            InterestPayment(3L, testDate3, 300.0)
+            InterestPayment(1L, "Treasury Bond A", testDate1, 100.0),
+            InterestPayment(2L, "Corporate Bond B", testDate2, 200.0),
+            InterestPayment(3L, "Municipal Bond C", testDate3, 300.0)
         )
         whenever(getPortfolioInterestScheduleUseCase()).thenReturn(flowOf(payments))
 
@@ -70,9 +70,9 @@ class InterestCalendarViewModelTest {
         val testDate1 = LocalDate(2025, 5, 15)
         val testDate2 = LocalDate(2025, 6, 1)
 
-        val payment1 = InterestPayment(1L, testDate1, 100.0)
-        val payment2 = InterestPayment(2L, testDate1, 200.0)
-        val payment3 = InterestPayment(3L, testDate2, 300.0)
+        val payment1 = InterestPayment(1L, "Treasury Bond A", testDate1, 100.0)
+        val payment2 = InterestPayment(2L, "Corporate Bond B", testDate1, 200.0)
+        val payment3 = InterestPayment(3L, "Municipal Bond C", testDate2, 300.0)
         
         val payments = listOf(payment1, payment2, payment3)
         whenever(getPortfolioInterestScheduleUseCase()).thenReturn(flowOf(payments))
@@ -96,11 +96,11 @@ class InterestCalendarViewModelTest {
         // Arrange
         val testDate = LocalDate(2025, 5, 15)
         val initialPayments = listOf(
-            InterestPayment(1L, testDate, 100.0)
+            InterestPayment(1L, "Treasury Bond A", testDate, 100.0)
         )
         val updatedPayments = listOf(
-            InterestPayment(1L, testDate, 100.0),
-            InterestPayment(2L, testDate, 200.0)
+            InterestPayment(1L, "Treasury Bond A", testDate, 100.0),
+            InterestPayment(2L, "Corporate Bond B", testDate, 200.0)
         )
         
         whenever(getPortfolioInterestScheduleUseCase()).thenReturn(

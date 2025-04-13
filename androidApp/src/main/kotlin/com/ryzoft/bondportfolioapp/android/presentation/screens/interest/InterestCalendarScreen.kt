@@ -368,7 +368,7 @@ fun CalendarPaymentCard(payment: InterestPayment) {
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Bond ID: ${payment.bondId}",
+                text = payment.bondName,
                 style = MaterialTheme.typography.bodySmall
             )
         }

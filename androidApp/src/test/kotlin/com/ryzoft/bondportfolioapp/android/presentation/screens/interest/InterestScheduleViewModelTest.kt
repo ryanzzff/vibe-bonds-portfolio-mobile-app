@@ -43,11 +43,13 @@ class InterestScheduleViewModelTest {
         val upcomingPayments = listOf(
             InterestPayment(
                 bondId = 1L,
+                bondName = "Treasury Bond 2025",
                 paymentDate = LocalDate(2025, 5, 15),
                 amount = 100.0
             ),
             InterestPayment(
                 bondId = 2L,
+                bondName = "Corporate Bond XYZ",
                 paymentDate = LocalDate(2025, 6, 20),
                 amount = 50.0
             )

@@ -7,6 +7,7 @@ import kotlinx.datetime.LocalDate
  */
 data class InterestPayment(
     val bondId: Long, // Foreign key linking back to the Bond
+    val bondName: String, // Name of the bond for display purposes
     val paymentDate: LocalDate,
     val amount: Double // Calculated interest amount for this payment date
 )

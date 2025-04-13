@@ -102,8 +102,8 @@ class InterestCalendarScreenTest {
     fun selectedDateWithPaymentsShowsPaymentsList() {
         // Arrange
         val testDate = LocalDate(2025, 5, 15)
-        val payment1 = InterestPayment(1L, testDate, 100.0)
-        val payment2 = InterestPayment(2L, testDate, 200.0)
+        val payment1 = InterestPayment(1L, "Treasury Bond 2025", testDate, 100.0)
+        val payment2 = InterestPayment(2L, "Corporate Bond XYZ", testDate, 200.0)
         
         val uiState = InterestCalendarUiState(
             isLoading = false,
@@ -121,9 +121,9 @@ class InterestCalendarScreenTest {
         // Assert
         composeRule.onNodeWithText("Payments on MAY 15, 2025").assertIsDisplayed() // Corrected date format
         composeRule.onNodeWithText("Payment: $100.00").assertIsDisplayed()
-        composeRule.onNodeWithText("Bond ID: 1").assertIsDisplayed()
+        composeRule.onNodeWithText("Treasury Bond 2025").assertIsDisplayed()
         composeRule.onNodeWithText("Payment: $200.00").assertIsDisplayed()
-        composeRule.onNodeWithText("Bond ID: 2").assertIsDisplayed()
+        composeRule.onNodeWithText("Corporate Bond XYZ").assertIsDisplayed()
     }
 
     @Test

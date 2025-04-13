@@ -228,7 +228,7 @@ fun PaymentCard(payment: InterestPayment) {
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
-                text = "Bond ID: ${payment.bondId}",
+                text = "Bond: ${payment.bondName}",
                 style = MaterialTheme.typography.bodySmall
             )
         }
